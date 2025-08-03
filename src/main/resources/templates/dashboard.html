@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/dashboard/dashboard.css" />
+</head>
+<body>
+<div class="container">
+    <p class="title">Dashboard</p>
+    <p class="title" th:text="|Welcome, ${firstName} ${lastName}!|"></p>
+
+    <a href="/appointments" class="button">Appointments</a>
+    <a href="/pets" class="button">Pets</a>
+    <a href="/medical-records" class="button">Medical Records</a>
+    <a href="/login" class="button logout-button">Logout</a>
+</div>
+</body>
+</html>

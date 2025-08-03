@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Records</title>
+  <link rel="stylesheet" href="/common_css/nav.css">
+  <link rel="stylesheet" href="/medical-records/medical-records.css">
+</head>
+<body>
+<nav>
+  <a href="/dashboard">Dashboard</a>
+  <a href="/appointments">Appointments</a>
+  <a href="/pets">Pets</a>
+  <div class="nav-item active">Medical Records</div>
+  <a href="/login" class="logout">Logout</a>
+</nav>
+
+<div class="container">
+  <h2 th:if="${petName != null}">Medical records of pet : <span th:text="${petName}"></span></h2>
+  <h2 th:if="${petName == null}">Medical records of all pets</h2>
+
+  <div th:each="record : ${medicalRecords}">
+      <div class="record">
+        <div class="record-group">
+          <p class="label">Pet Name:</p>
+          <p th:if="${petName == null}" th:text="${record.pet.name}" class="value"></p>
+        </div>
+        <div class="record-group">
+          <p class="label">Date:</p>
+          <p th:text="${record.treatment}" class="value"></p>
+        </div>
+        <div class="record-group">
+          <p class="label">Doctor:</p>
+          <p th:text="${record.veterinarian.lastName}" class="value"></p>
+        </div>
+        <div class="record-group">
+          <p class="label">Diagnosis:</p>
+          <p th:text="${record.diagnosis}" class="value"></p>
+        </div>
+      </div>
+  </div>
+</div>
+</body>
+</html>

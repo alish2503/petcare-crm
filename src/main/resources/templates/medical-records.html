@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Records</title>
+    <link rel="stylesheet" href="/common_css/nav.css">
+    <link rel="stylesheet" href="/medical-records/medical-records.css">
+</head>
+<body>
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/appointments">Appointments</a>
+    <a href="/pets">Pets</a>
+    <div class="nav-item active">Medical Records</div>
+    <a href="/login" class="logout">Logout</a>
+</nav>
+
+<div class="container">
+    <div class="title">Select a pet to view their medical records.</div>
+
+    <div class="record">
+        <div class="record-group">
+            <a href="/medical-records/selected" class="value">All Pets</a>
+        </div>
+        <div th:each="pet : ${pets}" class="record-group">
+            <a th:href="@{/medical-records/selected(petId=${pet.id})}" th:text="${pet.name}" class="value"></a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

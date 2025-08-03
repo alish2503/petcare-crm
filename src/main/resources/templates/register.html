@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href= "/common_css/reg-or-log.css" />
+</head>
+<body>
+<div class="container">
+    <h1>Register</h1>
+    <form id="registerForm" method="post" action="/register" novalidate>
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" name="firstName" required minlength="2" />
+        <p class="error-message" id="firstNameError">Please enter your first name (at least 2 characters).</p>
+
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" name="lastName" required minlength="2" />
+        <p class="error-message" id="lastNameError">Please enter your last name (at least 2 characters).</p>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required />
+        <p class="error-message" id="emailError">Please enter a valid email address.</p>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required minlength="6" />
+        <p class="error-message" id="passwordError">Password must be at least 6 characters long.</p>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <p class="link"> Already have an account? <a href="/login">Login</a> </p>
+</div>
+<script src="/register/register.js"></script>
+</body>
+</html>
