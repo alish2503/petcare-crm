@@ -54,7 +54,7 @@ public class AuthController {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        prepareSessionAndModel(user, "registeredUser", session, model);
+        prepareSessionAndModel(user, session, model);
         return "dashboard";
     }
 
@@ -78,7 +78,7 @@ public class AuthController {
             return "login";
         }
 
-        prepareSessionAndModel(user, "logedUser", session, model);
+        prepareSessionAndModel(user, session, model);
         return "dashboard";
     }
 
@@ -93,8 +93,8 @@ public class AuthController {
     }
 
 
-    private void prepareSessionAndModel(PetOwner user, String sessionKey, HttpSession session, Model model) {
-        session.setAttribute(sessionKey, user);
+    private void prepareSessionAndModel(PetOwner user, HttpSession session, Model model) {
+        session.setAttribute("logedUser", user);
         model.addAttribute("firstName", user.getFirstName());
         model.addAttribute("lastName", user.getLastName());
     }
