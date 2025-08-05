@@ -32,11 +32,19 @@ public class MedicalRecordController {
 
         PetOwner user = (PetOwner) session.getAttribute("loggedUser");
 
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         List<MedicalRecord> records;
         Pet pet = null;
         if (petId != null) {
             pet = petRepository.findById(petId)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid pet ID"));
+
+            if (!pet.getOwner().getId().equals(user.getId())) {
+                return "redirect:/medical-records";
+            }
             records = medicalRecordRepository.findAllByPetIdWithVet(petId);
         } else {
             records = medicalRecordRepository.findAllByUser(user);
@@ -53,6 +61,9 @@ public class MedicalRecordController {
     public String showPetSelection(Model model, HttpSession session) {
 
         PetOwner user = (PetOwner) session.getAttribute("loggedUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("pets", user.getPets());
 
         return "medical-records";

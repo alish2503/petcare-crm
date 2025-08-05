@@ -29,13 +29,11 @@ public class AuthController {
     @GetMapping("/vetcare")
     public String entryPoint(HttpSession session) {
 
-        if (session.getAttribute("logedUser") != null) {
-            return "dashboard";
-        } else if (session.getAttribute("registeredUser") != null) {
-            return "login";
+        if (session.getAttribute("loggedUser") != null) {
+            return "redirect:/dashboard";
         }
 
-        return "register";
+        return "redirect:/register";
     }
 
     @PostMapping("/register")
@@ -55,7 +53,7 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         prepareSessionAndModel(user, session, model);
-        return "dashboard";
+        return "redirect:/dashboard";
     }
 
     @PostMapping("/login")
@@ -79,22 +77,36 @@ public class AuthController {
         }
 
         prepareSessionAndModel(user, session, model);
+        return "redirect:/dashboard";
+    }
+
+    @GetMapping("/dashboard")
+    public String showDashboard(HttpSession session, Model model) {
+        PetOwner user = (PetOwner) session.getAttribute("loggedUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("firstName", user.getFirstName());
+        model.addAttribute("lastName", user.getLastName());
         return "dashboard";
     }
 
     @GetMapping("/login")
-    public String showLoginPage() {
+    public String showLoginPage(HttpSession session) {
+        session.invalidate();
         return "login";
     }
 
     @GetMapping("/register")
-    public String showRegisterPage() {
+    public String showRegisterPage(Model model) {
+        model.addAttribute("owner", new PetOwner());
         return "register";
     }
 
 
     private void prepareSessionAndModel(PetOwner user, HttpSession session, Model model) {
-        session.setAttribute("logedUser", user);
+        session.setAttribute("loggedUser", user);
         model.addAttribute("firstName", user.getFirstName());
         model.addAttribute("lastName", user.getLastName());
     }

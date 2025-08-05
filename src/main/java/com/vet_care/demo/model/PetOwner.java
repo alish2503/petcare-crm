@@ -1,7 +1,9 @@
 package com.vet_care.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
@@ -13,16 +15,22 @@ public class PetOwner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @Size(min = 2, message = "First name must be at least 2 characters")
+    @Pattern(regexp = "^[A-Za-z\\s\\-]+$", message = "Name must contain only letters, spaces, or hyphens")
+    @NotBlank(message = "First name is required")
     private String firstName;
 
-    @NotBlank
+    @Size(min = 2, message = "First name must be at least 2 characters")
+    @Pattern(regexp = "^[A-Za-z\\s\\-]+$", message = "Name must contain only letters, spaces, or hyphens")
+    @NotBlank(message = "Last name is required")
     private String lastName;
 
-    @NotBlank
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is required")
     private String email;
 
-    @Size(min = 6)
+    @Size(min = 6, message = "Password must be at least 6 characters")
+    @NotBlank(message = "Password is required")
     private String password;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -31,6 +39,8 @@ public class PetOwner {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public Long getId() { return id; }
 
     public String getEmail() {
         return email;

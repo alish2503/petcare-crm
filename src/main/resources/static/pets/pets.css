@@ -1,0 +1,91 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #f9f9f9;
+  padding: 16px;
+}
+
+h1 {
+  font-size: 24px;
+  color: #333;
+}
+
+.pet-card {
+  background: #f0f4ff;
+  border: 1px solid #c2d1f0;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+}
+
+.pet-actions {
+  margin-top: 5px;
+}
+
+.pet-actions button {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
+.add-btn {
+  background: #007bff;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#addPetForm {
+  margin-top: 20px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  display: none;
+}
+
+#addPetForm label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+#addPetForm input,
+#addPetForm select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+#addPetForm .form-actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#addPetForm button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#addPetForm .cancel-btn {
+  background: #6c757d;
+  color: white;
+}
+
+#addPetForm .save-btn {
+  background: #007bff;
+  color: white;
+}

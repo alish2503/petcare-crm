@@ -10,38 +10,18 @@ const lastNameError = document.getElementById('lastNameError');
 const emailError = document.getElementById('emailError');
 const passwordError = document.getElementById('passwordError');
 
+const fieldsToValidate = [
+  { input: firstNameInput, error: firstNameError },
+  { input: lastNameInput, error: lastNameError },
+  { input: emailInput, error: emailError },
+  { input: passwordInput, error: passwordError }
+];
+
+fieldsToValidate.forEach(({ input, error }) => {
+  input.addEventListener('input', () => validateField(input, error));
+});
+
 form?.addEventListener('submit', (e) => {
-  let valid = true;
-
-  if (!firstNameInput.checkValidity()) {
-    firstNameError.style.display = 'block';
-    valid = false;
-  } else {
-    firstNameError.style.display = 'none';
-  }
-
-  if (!lastNameInput.checkValidity()) {
-    lastNameError.style.display = 'block';
-    valid = false;
-  } else {
-    lastNameError.style.display = 'none';
-  }
-
-  if (!emailInput.checkValidity()) {
-    emailError.style.display = 'block';
-    valid = false;
-  } else {
-    emailError.style.display = 'none';
-  }
-
-  if (!passwordInput.checkValidity()) {
-    passwordError.style.display = 'block';
-    valid = false;
-  } else {
-    passwordError.style.display = 'none';
-  }
-
-  if (!valid) {
-    e.preventDefault();
-  }
+  const isValid = validateFormFields(fieldsToValidate);
+  if (!isValid) e.preventDefault();
 });
