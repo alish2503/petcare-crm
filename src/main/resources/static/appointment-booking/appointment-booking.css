@@ -1,0 +1,39 @@
+.cancel-btn,
+.cancel-btn:hover,
+.cancel-btn:focus {
+  text-decoration: none;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.slot-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin: 4px 6px 4px 0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+}
+
+.slot-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.slot-btn.booked {
+  background-color: #dc3545;
+  color: #fff;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.6;
+  text-decoration: line-through;
+  pointer-events: none;
+}

@@ -1,0 +1,28 @@
+.record-card {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content 1fr;
+  gap: 8px 16px;
+  align-items: center;
+}
+
+.record-row {
+  display: contents; /* Чтобы использовать grid-структуру из .record-card */
+}
+
+.record-row.full-width .label,
+.record-row.full-width .value {
+  grid-column: 1 / -1; /* Занимают всю ширину */
+}
+
+.label {
+  font-weight: bold;
+  color: #333;
+}
+
+.right-label {
+  justify-self: end;
+}
+
+.value {
+  color: #555;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Doctors</title>
+  <link rel="stylesheet" href="/appointment-booking/appointment-booking.css">
+  <link rel="stylesheet" href="/common/cards.css">
+</head>
+<body>
+<h2>Doctors</h2>
+
+<div th:each="vet : ${veterinarians}" class="card">
+  <div class="card-header">
+    <h3 th:text="'Dr. ' + ${vet.lastName}">Dr. Smith</h3>
+    <button class="add-btn" type="button" th:onclick="|toggleForm(${vet.id})|">Book</button>
+  </div>
+  <p th:text="${vet.specialization}">Veterinary Surgeon</p>
+
+    <form th:action="@{/appointment-booking/__slotId__}" method="post"
+          th:id="'form-' + ${vet.id}" style="display: none; margin-top: 10px;">
+    <div id="editForm">
+      <input type="hidden" name="vetId" th:value="${vet.id}" />
+
+      <label>Pet Name</label>
+      <select name="petId" required>
+        <option disabled selected>Pet Name</option>
+        <option th:each="pet : ${pets}" th:value="${pet.id}" th:text="${pet.name}">Buddy</option>
+      </select>
+
+      <label>Reason</label>
+      <input type="text" id="reason" name="reason" placeholder="Reason for visit" required />
+      <p class="reason-error" style="color: red; display: none;">Write reason</p>
+
+      <label>Available Slots</label>
+      <button
+              th:each="slot : ${vet.availableSlots}"
+              type="button"
+              th:disabled="${slot.booked}"
+              th:class="'slot-btn ' + (${slot.booked} ? 'booked' : '')"
+              th:text="${#temporals.format(slot.dateTime, 'dd.MM.yyyy HH:mm')}"
+              th:onclick="'selectSlot(this, ' + ${slot.id} + ')'">
+      </button>
+
+      <input type="hidden" name="slotId" class="slot-input" />
+      <div class="form-actions">
+        <button class="save-btn" type="submit">Confirm</button>
+        <button class="cancel-btn" type="button" onclick="cancelAppointment(this)">Cancel</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<a href="/appointments" class="cancel-btn">Cancel</a>
+
+<script src="/appointment-booking/appointment-booking.js"></script>
+<script src="/validation/validation.js"></script>
+</body>
+</html>

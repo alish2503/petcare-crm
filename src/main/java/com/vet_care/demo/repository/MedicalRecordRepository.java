@@ -15,11 +15,11 @@ public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Lo
     @Query("""
         SELECT r FROM MedicalRecord r
         JOIN FETCH r.pet
-        JOIN FETCH r.vet
+        JOIN FETCH r.veterinarian
         WHERE r.pet.owner = :owner
     """)
     List<MedicalRecord> findAllByUser(@Param("owner") PetOwner owner);
 
-    @Query("SELECT r FROM MedicalRecord r JOIN FETCH r.vet WHERE r.pet.id = :petId")
+    @Query("SELECT r FROM MedicalRecord r JOIN FETCH r.veterinarian WHERE r.pet.id = :petId")
     List<MedicalRecord> findAllByPetIdWithVet(@Param("petId") Long petId);
 }

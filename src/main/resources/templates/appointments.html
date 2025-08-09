@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8" />
+  <title>Appointments</title>
+  <link rel="stylesheet" href="/common/nav.css">
+  <link rel="stylesheet" href="/appointments/appointments.css" />
+  <link rel="stylesheet" href="/common/cards.css">
+</head>
+<body>
+<nav>
+  <a href="/dashboard">Dashboard</a>
+  <div class="nav-item active">Appointments</div>
+  <a href="/pets">Pets</a>
+  <a href="/medical-records">Medical Records</a>
+  <a href="/login" class="logout">Logout</a>
+</nav>
+
+<h1>Appointments</h1>
+<div style="text-align: right;">
+  <a href="/appointments/appointment-booking" class="add-btn add-button">+ Add Appointment</a>
+</div>
+
+<div th:each="appointment : ${appointments}">
+    <div class="card">
+      <strong>Name:</strong> <span th:text="${appointment.pet.name}"></span><br>
+      Doctor: <span th:text="${appointment.veterinarian.lastName}"></span> ·
+      Date: <span th:text="${appointment.dateTime}"></span><br>
+      Reason: <span th:text="${appointment.reason}"></span>
+    </div>
+    <form th:action="@{/appointments/{id}(id=${appointment.id})}" method="post" style="display:inline;">
+      <button class="cancel-btn">Cancel</button>
+    </form>
+</div>
+</body>
+</html>

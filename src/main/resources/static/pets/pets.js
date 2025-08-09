@@ -31,7 +31,7 @@ function showEditForm(id, name, species, gender, birthDate, button) {
     document.getElementById('edit-gender').value = gender;
     document.getElementById('edit-birthDate')._flatpickr.setDate(birthDate);
 
-    const card = button.closest('.pet-card');
+    const card = button.closest('.card');
     card.appendChild(formContainer);
     formContainer.style.display = 'block';
 }

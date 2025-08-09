@@ -20,4 +20,15 @@ public class Veterinarian {
 
     @OneToMany(mappedBy = "veterinarian")
     private List<MedicalRecord> medicalRecords = new ArrayList<>();
+
+    @OneToMany(mappedBy = "veterinarian")
+    private List<AvailableSlot> availableSlots = new ArrayList<>();
+
+    public List<AvailableSlot> getAvailableSlots() {
+        return availableSlots;
+    }
+
+    public void setAvailableSlots(List<AvailableSlot> availableSlots) {
+        this.availableSlots = availableSlots;
+    }
 }

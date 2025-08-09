@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pets</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <link rel="stylesheet" href="/common_css/nav.css">
-  <link rel="stylesheet" href="/pets/pets.css" />
+  <link rel="stylesheet" href="/common/nav.css">
+  <link rel="stylesheet" href="/pets/pets.css">
+  <link rel="stylesheet" href="/common/cards.css">
 </head>
 <body>
 <nav>
@@ -16,75 +16,57 @@
   <a href="/medical-records">Medical Records</a>
   <a href="/login" class="logout">Logout</a>
 </nav>
-
-<h1>My Pets</h1>
-
 <div id="petList">
-  <div th:each="pet : ${pets}" class="pet-card">
+  <h2>My Pets</h2>
+  <div th:each="pet : ${pets}" class="card">
     <strong>Name:</strong> <span th:text="${pet.name}"></span><br>
-    <span>
-      Species: <span th:text="${pet.species}"></span> ·
-      Gender: <span th:text="${pet.gender}"></span> ·
-      Age: <span th:text="${pet.age}"></span>
-    </span>
+    Species: <span th:text="${pet.species}"></span> ·
+    Gender: <span th:text="${pet.gender}"></span> ·
+    Age: <span th:text="${pet.age}"></span>
     <div class="pet-actions">
-      <button type="button"
-              th:onclick="'showEditForm(' + ${pet.id} + ', \'' + ${pet.name} + '\', \'' + ${pet.species} + '\',
-              \'' + ${pet.gender} + '\', \'' + ${pet.birthDate} + '\', this)'">
-        Edit
+      <button type="button" class="edit-btn"
+              th:onclick="|showEditForm(${pet.id}, '${pet.name}', '${pet.species}', '${pet.gender}', '${pet.birthDate}', this)|">
+
+      Edit
       </button>
-      <form th:action="@{/pets/delete/{id}(id=${pet.id})}" method="post" style="display:inline;">
-        <button type="submit">Delete</button>
+      <form th:action="@{/pets/{id}(id=${pet.id})}" method="post" style="display:inline;">
+        <button type="submit" class="delete-btn">Delete</button>
       </form>
     </div>
   </div>
+  <button class="add-btn" type="button" onclick="showAddForm()">Add Pet</button>
 </div>
 
-<button class="add-btn" type="button" onclick="showAddForm()">Add Pet</button>
-
 <div id="editFormContainer" style="display: none; margin-top: 10px;">
-  <form id="editForm" th:action="@{/pets/save}" method="post" th:object="${pet}">
+  <form id="editForm" th:action="@{/pets/save}" method="post">
     <input type="hidden" name="id" id="edit-id" />
-
     <label>Name</label>
-    <input type="text"
-           th:field="*{name}"
-           id="name"
-           name="name"
-           required minlength="2"
-           pattern="^[A-Za-z\s\-]+$"
-    />
-    <p id="name-error" style="color: red; display: none;">Invalid name format</p>
-    <p style="color: red; display: none;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
-
-    <label>Species</label>
-    <select name="species" id="edit-species" required>
-      <option value="Dog">Dog</option>
-      <option value="Cat">Cat</option>
-      <option value="Bird">Bird</option>
-    </select>
-
-    <label>Gender</label>
-    <select name="gender" id="edit-gender" required>
-      <option value="Male">Male</option>
-      <option value="Female">Female</option>
-    </select>
-
-    <label>Birth Date</label>
-    <input type="text" id="edit-birthDate"
-           name="birthDate"
-           placeholder="YYYY-MM-DD"
-           required />
-
-    <div class="form-actions">
-      <button type="submit" class="save-btn">Apply</button>
-      <button type="button" class="cancel-btn" onclick="cancelEdit()">Cancel</button>
-    </div>
+      <input type="text" id="edit-name" name="name" required minlength="2" pattern="^[A-Za-z\s\-]+$"/>
+      <p id="name-error" style="color: red; display: none;">Invalid name format</p>
+      <label>Species</label>
+      <select name="species" id="edit-species" required>
+        <option value="Dog">Dog</option>
+        <option value="Cat">Cat</option>
+        <option value="Bird">Bird</option>
+      </select>
+      <label>Gender</label>
+      <select name="gender" id="edit-gender" required>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+      <label>Birth Date</label>
+      <input type="text" id="edit-birthDate"
+             name="birthDate"
+             placeholder="YYYY-MM-DD"
+             required />
+      <div class="form-actions">
+        <button type="submit" class="save-btn">Apply</button>
+        <button type="button" class="cancel-btn" onclick="cancelEdit()">Cancel</button>
+      </div>
   </form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="/pets/pets.js"></script>
-<script src="/register/register.js"></script>
-<script src="/common_js/validation.js"></script>
+<script src="/validation/validation.js"></script>
 </body>
 </html>

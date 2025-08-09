@@ -1,0 +1,37 @@
+.form-container {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 300px;
+}
+
+.btn {
+    display: block;
+    width: 90%;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    color: white;
+    margin: 12px auto;
+}
+
+
+.blue-button {
+    background-color: #007BFF;
+}
+
+.blue-button:hover {
+    background-color: #0069d9;
+}
+
+.green-button {
+    background-color: green;
+}
+
+.green-button:hover {
+    background-color:rgb(5, 92, 5);
+}

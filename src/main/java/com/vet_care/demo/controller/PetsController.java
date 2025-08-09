@@ -31,15 +31,13 @@ public class PetsController {
             return "redirect:/login";
         }
         model.addAttribute("pets", user.getPets());
-        model.addAttribute("pet", new Pet());
         return "pets";
     }
 
     @PostMapping("/pets/save")
     public String savePet(@ModelAttribute("pet") @Valid Pet pet,
                           BindingResult result,
-                          HttpSession session,
-                          Model model) {
+                          HttpSession session) {
 
         PetOwner user = (PetOwner) session.getAttribute("loggedUser");
 
@@ -48,8 +46,7 @@ public class PetsController {
         }
 
         if (result.hasErrors()) {
-            model.addAttribute("pets", user.getPets());
-            return "pets";
+            return "redirect:/pets";
         }
 
         if (pet.getId() != null) {
@@ -66,7 +63,7 @@ public class PetsController {
         return "redirect:/pets";
     }
 
-    @PostMapping("/delete/{id}")
+    @PostMapping("/pets/{id}")
     public String deletePet(@PathVariable Long id, HttpSession session) {
         PetOwner user = (PetOwner) session.getAttribute("loggedUser");
 

@@ -37,6 +37,9 @@ public class Pet {
     @OneToMany(mappedBy = "pet")
     private List<MedicalRecord> medicalRecords = new ArrayList<>();
 
+    @OneToOne(mappedBy = "slot")
+    private Appointment appointment;
+
     public List<MedicalRecord> getMedicalRecords() {
         return medicalRecords;
     }
@@ -54,4 +57,23 @@ public class Pet {
 
     public void setOwner(PetOwner owner) { this.owner = owner; }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
 }

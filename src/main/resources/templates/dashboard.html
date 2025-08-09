@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="/dashboard/dashboard.css" />
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/common/common.css">
+    <link rel="stylesheet" href="/common/common-frames.css">
 </head>
-<body>
-<div class="container">
-    <p class="title">Dashboard</p>
-    <p class="title" th:text="|Welcome, ${firstName} ${lastName}!|"></p>
+<body class="full-height-page">
+<div class="form-container">
+    <h2>Dashboard</h2>
 
-    <a href="/appointments" class="button">Appointments</a>
-    <a href="/pets" class="button">Pets</a>
-    <a href="/medical-records" class="button">Medical Records</a>
-    <a href="/login" class="button logout-button">Logout</a>
+    <a href="/appointments" class="btn blue-button">Appointments</a>
+    <a href="/pets" class="btn blue-button">Pets</a>
+    <a href="/records" class="btn blue-button">Medical Records</a>
+    <a href="/logout" class="btn red-button">Logout</a>
 </div>
 </body>
 </html>
