@@ -3,23 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <title>Doctors</title>
-  <link rel="stylesheet" href="/appointment-booking/appointment-booking.css">
-  <link rel="stylesheet" href="/common/cards.css">
+  <link rel="stylesheet" href="/css/appointment-booking.css">
+  <link rel="stylesheet" href="/css/edit.css">
+  <link rel="stylesheet" href="/css/cards.css">
 </head>
 <body>
 <h2>Doctors</h2>
 
-<div th:each="vet : ${veterinarians}" class="card">
+<div th:each="doctor : ${doctorsPageProjection}" class="card">
   <div class="card-header">
-    <h3 th:text="'Dr. ' + ${vet.lastName}">Dr. Smith</h3>
+    <h3 th:text="'Dr. ' + ${doctor.lastName}">Dr. Smith</h3>
     <button class="add-btn" type="button" th:onclick="|toggleForm(${vet.id})|">Book</button>
   </div>
-  <p th:text="${vet.specialization}">Veterinary Surgeon</p>
+  <p th:text="${doctor.specialization}">Veterinary Surgeon</p>
 
-    <form th:action="@{/appointment-booking/__slotId__}" method="post"
-          th:id="'form-' + ${vet.id}" style="display: none; margin-top: 10px;">
+    <form th:action="@{/appointments}" method="post"
+          th:id="'form-' + ${doctor.id}" style="display: none; margin-top: 10px;">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <div id="editForm">
-      <input type="hidden" name="vetId" th:value="${vet.id}" />
+      <input type="hidden" name="doctorId" th:value="${doctor.id}" />
 
       <label>Pet Name</label>
       <select name="petId" required>
@@ -32,14 +34,11 @@
       <p class="reason-error" style="color: red; display: none;">Write reason</p>
 
       <label>Available Slots</label>
-      <button
-              th:each="slot : ${vet.availableSlots}"
-              type="button"
-              th:disabled="${slot.booked}"
-              th:class="'slot-btn ' + (${slot.booked} ? 'booked' : '')"
-              th:text="${#temporals.format(slot.dateTime, 'dd.MM.yyyy HH:mm')}"
-              th:onclick="'selectSlot(this, ' + ${slot.id} + ')'">
-      </button>
+      <label th:each="slot : ${doctor.availableSlots}"
+             th:class="'slot-btn ' + (${slot.booked} ? 'booked' : '')">
+        <input type="radio" name="slotId" th:value="${slot.id}" th:disabled="${slot.booked}" required style="display:none;" />
+        <span th:text="${#temporals.format(slot.dateTime, 'dd.MM.yyyy HH:mm')}"></span>
+      </label>
 
       <input type="hidden" name="slotId" class="slot-input" />
       <div class="form-actions">
@@ -50,9 +49,9 @@
   </form>
 </div>
 
-<a href="/appointments" class="cancel-btn">Cancel</a>
+<a href="/appointments" class="cancel-btn">Back</a>
 
-<script src="/appointment-booking/appointment-booking.js"></script>
-<script src="/validation/validation.js"></script>
+<script src="/js/appointment-booking.js"></script>
+<script src="/js/validation.js"></script>
 </body>
 </html>

@@ -1,11 +1,3 @@
-.card {
-  background: #f0f4ff;
-  border: 1px solid #c2d1f0;
-  border-radius: 10px;
-  padding: 10px 20px;
-  margin-bottom: 10px;
-}
-
 button {
   padding: 8px 16px;
   border: none;
@@ -45,6 +37,18 @@ button {
   border-radius: 6px;
 }
 
+.add-btn.add-button {
+  display: inline-block;
+  margin-bottom: 20px;
+  background: #4CAF50;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.add-btn.add-button:hover {
+  background-color: #388E3C;
+}
+
 #editForm {
   margin-top: 20px;
   background: #f1f1f1;
@@ -68,9 +72,7 @@ input, select {
   border-radius: 6px;
 }
 
-button, .add-btn, .save-btn, .cancel-btn, .edit-btn, .delete-btn {
-  transition: background-color 0.3s ease;
-}
+
 
 .add-btn:hover,
 .save-btn:hover {

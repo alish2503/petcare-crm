@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function toggleForm(vetId) {
-  const form = document.getElementById(`form-${vetId}`);
+  const form = document.getElementById(`form-${doctorId}`);
   if (!form) return;
 
   if (form.style.display === 'none' || form.style.display === '') {
@@ -31,9 +31,8 @@ function toggleForm(vetId) {
 function resetForm(form) {
   const reasonInput = form.querySelector('input[name="reason"]');
   const reasonError = form.querySelector('.reason-error');
-  const slotInput = form.querySelector('input[name="slotId"]');
   const petSelect = form.querySelector('select[name="petId"]');
-  const slotButtons = form.querySelectorAll('.slot-btn');
+  const slotRadios = form.querySelectorAll('input[name="slotId"]');
 
   if (reasonInput) {
     reasonInput.value = '';
@@ -42,31 +41,12 @@ function resetForm(form) {
   if (reasonError) {
     reasonError.style.display = 'none';
   }
-  if (slotInput) {
-    slotInput.value = '';
-  }
   if (petSelect) {
     petSelect.selectedIndex = 0;
   }
-  if (slotButtons) {
-    slotButtons.forEach(btn => btn.classList.remove('selected'));
+  if (slotRadios) {
+    slotRadios.forEach(radio => radio.checked = false);
   }
-}
-
-function selectSlot(button, slotId) {
-  const form = button.closest('form');
-  if (!form) return;
-
-  const slotInput = form.querySelector('.slot-input');
-  if (slotInput) {
-    slotInput.value = slotId;
-  }
-
-  const baseAction = form.getAttribute('data-base-action');
-  form.action = baseAction.replace('__slotId__', slotId);
-
-  form.querySelectorAll('.slot-btn').forEach(btn => btn.classList.remove('selected'));
-  button.classList.add('selected');
 }
 
 function cancelAppointment(cancelButton) {

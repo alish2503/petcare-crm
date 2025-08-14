@@ -29,16 +29,13 @@ public class Pet {
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private PetOwner owner;
+    private PetUser owner;
 
     @OneToMany(mappedBy = "pet")
     private List<Appointment> appointments = new ArrayList<>();
 
     @OneToMany(mappedBy = "pet")
     private List<MedicalRecord> medicalRecords = new ArrayList<>();
-
-    @OneToOne(mappedBy = "slot")
-    private Appointment appointment;
 
     public List<MedicalRecord> getMedicalRecords() {
         return medicalRecords;
@@ -47,15 +44,28 @@ public class Pet {
     public String getName() {
         return name;
     }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
     public int getAge() {
         return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
     public Long getId() { return id; }
 
-    public PetOwner getOwner() { return owner; }
+    public PetUser getOwner() { return owner; }
 
-    public void setOwner(PetOwner owner) { this.owner = owner; }
+    public void setOwner(PetUser owner) { this.owner = owner; }
 
     public void setId(Long id) {
         this.id = id;

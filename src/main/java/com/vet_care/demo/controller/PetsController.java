@@ -1,84 +1,70 @@
 package com.vet_care.demo.controller;
 
 import com.vet_care.demo.model.Pet;
-import com.vet_care.demo.model.PetOwner;
-import com.vet_care.demo.repository.PetRepository;
-import jakarta.servlet.http.HttpSession;
+import com.vet_care.demo.model.PetUser;
+import com.vet_care.demo.security.CustomUserDetails;
+import com.vet_care.demo.service.PetService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 /**
  * @author Alish
  */
 
 @Controller
+@RequestMapping("/pets")
 public class PetsController {
-    private final PetRepository petRepository;
 
-    public PetsController(PetRepository petRepository) {
-        this.petRepository = petRepository;
+    private final PetService petService;
+
+    public PetsController(PetService petService) {
+        this.petService = petService;
     }
 
-    @GetMapping("/pets")
-    public String showPets(HttpSession session, Model model) {
-        PetOwner user = (PetOwner)session.getAttribute("loggedUser");
-        if (user == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("pets", user.getPets());
+    @GetMapping
+    public String listPets(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+        PetUser owner = userDetails.getUser();
+        model.addAttribute("pets", petService.getPetsByOwner(owner));
         return "pets";
     }
 
-    @PostMapping("/pets/save")
-    public String savePet(@ModelAttribute("pet") @Valid Pet pet,
-                          BindingResult result,
-                          HttpSession session) {
-
-        PetOwner user = (PetOwner) session.getAttribute("loggedUser");
-
-        if (user == null) {
-            return "redirect:/login";
+    @PostMapping
+    public String createPet(@AuthenticationPrincipal CustomUserDetails userDetails,
+                            @ModelAttribute @Valid Pet pet,
+                            BindingResult result) {
+        if (result.hasErrors()) {
+            return "pets";
         }
+        PetUser owner = userDetails.getUser();
+        petService.createPet(owner, pet);
+        return "redirect:/pets";
+    }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("@petSecurity.isOwner(#id, principal)")
+    public String updatePet(@AuthenticationPrincipal CustomUserDetails userDetails,
+                            @PathVariable Long id,
+                            @ModelAttribute @Valid Pet pet,
+                            BindingResult result) {
         if (result.hasErrors()) {
             return "redirect:/pets";
         }
-
-        if (pet.getId() != null) {
-            Optional<Pet> existingPetOpt = petRepository.findById(pet.getId());
-            if (existingPetOpt.isEmpty() || !existingPetOpt.get().getOwner().getId().equals(user.getId())) {
-                return "redirect:/pets";
-            }
-        } else {
-            pet.setOwner(user);
-        }
-
-        petRepository.save(pet);
-
+        PetUser owner = userDetails.getUser();
+        petService.updatePet(id, pet, owner);
         return "redirect:/pets";
     }
 
-    @PostMapping("/pets/{id}")
-    public String deletePet(@PathVariable Long id, HttpSession session) {
-        PetOwner user = (PetOwner) session.getAttribute("loggedUser");
-
-        if (user == null) {
-            return "redirect:/login";
-        }
-
-        Optional<Pet> petOptional = petRepository.findById(id);
-        if (petOptional.isPresent()) {
-            Pet pet = petOptional.get();
-            if (pet.getOwner().getId().equals(user.getId())) {
-                petRepository.delete(pet);
-            }
-        }
-
+    @DeleteMapping("/{id}")
+    @PreAuthorize("@petSecurity.isOwner(#id, principal)")
+    public String deletePet(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        PetUser owner = userDetails.getUser();
+        petService.deletePet(id, owner);
         return "redirect:/pets";
     }
 }
+

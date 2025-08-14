@@ -6,23 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Veterinarian {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String specialization;
+public class Doctor extends AbstractUser {
 
-    @OneToMany(mappedBy = "veterinarian")
+    String specialization;
+
+    @OneToMany(mappedBy = "doctor")
     private List<Appointment> appointments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "veterinarian")
+    @OneToMany(mappedBy = "doctor")
     private List<MedicalRecord> medicalRecords = new ArrayList<>();
 
-    @OneToMany(mappedBy = "veterinarian")
+    @OneToMany(mappedBy = "doctor")
     private List<AvailableSlot> availableSlots = new ArrayList<>();
+
+    public String getSpecialization() {
+        return specialization;
+    }
 
     public List<AvailableSlot> getAvailableSlots() {
         return availableSlots;

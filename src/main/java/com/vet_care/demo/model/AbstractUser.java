@@ -1,16 +1,20 @@
 package com.vet_care.demo.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
-import java.util.List;
+/**
+ * @author Alish
+ */
 
-@Entity
-public class PetOwner {
+@MappedSuperclass
+public abstract class AbstractUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,13 +37,6 @@ public class PetOwner {
     @NotBlank(message = "Password is required")
     private String password;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Pet> pets = new ArrayList<>();
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Long getId() { return id; }
 
     public String getEmail() {
@@ -58,7 +55,19 @@ public class PetOwner {
         return password;
     }
 
-    public List<Pet> getPets() {
-        return pets;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

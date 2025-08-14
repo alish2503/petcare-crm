@@ -17,7 +17,7 @@ public class AvailableSlot {
     private boolean booked = false;
 
     @ManyToOne
-    private Veterinarian veterinarian;
+    private Doctor doctor;
 
     public LocalDateTime getDateTime() {
         return dateTime;

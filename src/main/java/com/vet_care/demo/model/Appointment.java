@@ -23,20 +23,23 @@ public class Appointment {
     private Pet pet;
 
     @ManyToOne
-    @JoinColumn(name = "vet_id")
-    private Veterinarian veterinarian;
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
 
     @OneToOne
     @JoinColumn(name = "slot_id")
     private AvailableSlot slot;
 
+    public AvailableSlot getSlot() {
+        return slot;
+    }
 
     public void setPet(Pet pet) {
         this.pet = pet;
     }
 
-    public void setVeterinarian(Veterinarian veterinarian) {
-        this.veterinarian = veterinarian;
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 
     public LocalDateTime getDateTime() {
@@ -47,7 +50,7 @@ public class Appointment {
         this.dateTime = dateTime;
     }
 
-    public AvailableSlot getSlot() {
-        return slot;
+    public void setSlot(AvailableSlot slot) {
+        this.slot = slot;
     }
 }
