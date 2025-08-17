@@ -1,112 +1,101 @@
 button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .cancel-btn {
-  display: inline-block;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  cursor: pointer;
-  text-align: center;
-  user-select: none;
+    display: inline-block;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    user-select: none;
 }
 
 .cancel-btn:hover {
-  background-color: #c9302c;
+    background-color: #c9302c;
 }
 
 .save-btn {
-  background: #007bff;
-  color: white;
+    background: #007bff;
+    color: white;
 }
 
 .add-btn {
-  background: #007bff;
-  color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
+    background: #007bff;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
 }
 
 .add-btn.add-button {
-  display: inline-block;
-  margin-bottom: 20px;
-  background: #4CAF50;
-  text-decoration: none;
-  font-weight: bold;
+    display: inline-block;
+    margin-bottom: 20px;
+    background: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
 }
 
 .add-btn.add-button:hover {
-  background-color: #388E3C;
+    background-color: #388E3C;
+}
+
+.editFormContainer {
+    display: none;
+    margin-top: 10px;
 }
 
 #editForm {
-  margin-top: 20px;
-  background: #f1f1f1;
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
+    margin-top: 20px;
+    background: #f1f1f1;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
 }
 
 label {
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 4px;
-  color: #333;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    color: #333;
 }
 
 input, select {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
 }
-
-
 
 .add-btn:hover,
 .save-btn:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 .cancel-btn:hover {
-  background-color: #c9302c;
+    background-color: #c9302c;
 }
 
 .edit-btn {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 .edit-btn:hover {
-  background-color: #5a6268;
-}
-
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.delete-btn:hover {
-  background-color: #c9302c;
+    background-color: #5a6268;
 }

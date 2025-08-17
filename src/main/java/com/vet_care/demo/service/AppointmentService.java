@@ -35,7 +35,7 @@ public class AppointmentService {
     }
 
     @Transactional
-    public Appointment addAppointment(Appointment appointment, Long petId, Long doctorId, Long slotId) {
+    public Appointment addAppointment(String reason, Long petId, Long doctorId, Long slotId) {
 
         Pet pet = petService.getPetById(petId);
         Doctor doctor = doctorRepository.findById(doctorId).
@@ -45,33 +45,28 @@ public class AppointmentService {
                 findById(slotId).orElseThrow(() -> new IllegalArgumentException("Slot not found"));
 
         LocalDateTime slotDateTime = slot.getDateTime();
-
-        boolean alreadyExists = appointmentRepository.existsByDateTimeAndDoctor(slotDateTime, doctor);
+        boolean alreadyExists = appointmentRepository.existsBySlot_DateTimeAndDoctor(slotDateTime, doctor);
         if (alreadyExists) {
             throw new IllegalStateException("Appointment already exists for this slot and doctor");
         }
-
         slot.setBooked(true);
         availableSlotRepository.save(slot);
-
-        appointment.setDateTime(slotDateTime);
-        appointment.setPet(pet);
-        appointment.setDoctor(doctor);
-        appointment.setSlot(slot);
-
-        return appointmentRepository.save(appointment);
+        return appointmentRepository.save(new Appointment(reason, pet, doctor, slot));
     }
 
     public List<AppointmentsPageProjection> getAppointmentsForUser(PetUser user) {
-        return appointmentRepository.
-                findByPetOwnerAndSlotDateTimeAfterOrderBySlotDateTimeAsc(user, LocalDateTime.now());
+        return appointmentRepository.findUpcomingAppointments(user, LocalDateTime.now());
     }
 
     @Transactional
-    public void deleteAppointment(Long appointmentId) {
+    public void deleteAppointment(Long appointmentId, PetUser user) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new IllegalArgumentException("Appointment not found"));
 
+        PetUser owner = appointment.getPet().getOwner();
+        if (!owner.getId().equals(user.getId())) {
+            throw new SecurityException("You are not allowed to delete this appointment");
+        }
         AvailableSlot slot = appointment.getSlot();
         slot.setBooked(false);
         availableSlotRepository.save(slot);

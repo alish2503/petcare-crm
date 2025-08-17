@@ -7,12 +7,8 @@ import java.time.LocalDate;
  */
 public interface MedicalRecordsPageProjection {
     Long getId();
-    DoctorInfo getDoctor();
     String getTreatment();
     String getDiagnosis();
     LocalDate getDate();
-
-    interface DoctorInfo {
-        String getLastName();
-    }
+    String getDoctorLastName();
 }

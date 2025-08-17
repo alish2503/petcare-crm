@@ -1,6 +1,6 @@
 package com.vet_care.demo.controller;
 
-import com.vet_care.demo.dto.DoctorsPageProjection;
+import com.vet_care.demo.dto.DoctorDTO;
 import com.vet_care.demo.model.PetUser;
 import com.vet_care.demo.security.CustomUserDetails;
 import com.vet_care.demo.service.AvailableSlotService;
@@ -32,9 +32,9 @@ public class AvailableSlotsController {
     public String showAvailableSlots(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
 
         PetUser owner = userDetails.getUser();
-        List<DoctorsPageProjection> doctorsPageProjection = availableSlotService.getDoctorsWithAvailableFutureSlots();
+        List<DoctorDTO> doctorDTOs = availableSlotService.getDoctorsWithAvailableFutureSlots();
 
-        model.addAttribute("doctorsPageProjection", doctorsPageProjection);
+        model.addAttribute("doctorDTOs", doctorDTOs);
         model.addAttribute("pets", petService.getPetsByOwner(owner));
 
         return "appointment-booking";

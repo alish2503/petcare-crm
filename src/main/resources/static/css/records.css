@@ -1,0 +1,17 @@
+.record-card {
+  display: grid;
+  grid-template-columns: max-content max-content max-content max-content;
+  column-gap: 60px;
+  row-gap: 6px;
+  align-items: center;
+}
+
+.record-row {
+  display: contents;
+}
+
+.label {
+  font-weight: bold;
+  color: #333;
+}
+

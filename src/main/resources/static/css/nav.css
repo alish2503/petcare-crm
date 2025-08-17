@@ -1,31 +1,30 @@
 nav {
-  background: #f0f0f0;
-  padding: 10px 20px;
-  display: flex;
-  gap: 30px;
-  align-items: center;
+    background: #f0f0f0;
+    padding: 10px 20px;
+    display: flex;
+    gap: 30px;
+    align-items: center;
 }
 
 nav a {
-  color: #333;
-  text-decoration: none;
+    color: #333;
+    text-decoration: none;
 }
 
 .nav-item.active {
-  color: #007bff;
-  pointer-events: none;
-  text-decoration: none;
-  cursor: default;
+    color: #007bff;
+    pointer-events: none;
+    text-decoration: none;
+    cursor: default;
 }
 
 nav form {
-  margin-left: auto;
+    margin-left: auto;
 }
 
 nav form button.logout {
-  all: unset; /* сброс дефолтных стилей кнопки */
-  cursor: pointer;
-  color: #dc3545;
-  text-decoration: none;
-  font: inherit; /* наследуем шрифт навигации */
+    all: unset;
+    cursor: pointer;
+    color: #dc3545;
+    font: inherit;
 }

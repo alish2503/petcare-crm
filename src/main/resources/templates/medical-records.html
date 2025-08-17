@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Pet Records</title>
-  <link rel="stylesheet" href="/css/nav.css">
-  <link rel="stylesheet" href="/css/edit.css">
-  <link rel="stylesheet" href="/css/cards.css">
-  <link rel="stylesheet" href="/css/medical-records.css">
+    <meta charset="UTF-8">
+    <title>Medical Records</title>
+    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/edit.css">
+    <link rel="stylesheet" href="/css/cards.css">
+    <link rel="stylesheet" href="/css/records.css">
 </head>
 <body>
 <nav>
@@ -14,31 +14,24 @@
     <a href="/appointments">Appointments</a>
     <a href="/pets">Pets</a>
     <div class="nav-item active">Medical Records</div>
-    <form action="/logout" method="post" style="margin-left: auto;">
+    <form action="/logout" method="post">
         <button type="submit" class="logout">Logout</button>
     </form>
 </nav>
-<div class="records-container">
   <h2>Medical records of pet : <span th:text="${petName}"></span></h2>
-  <div th:each="record : ${medicalRecordsPageProjections}" class="card">
+<div th:each="record : ${medicalRecordsPageProjections}" class="card">
     <div class="record-card">
-      <div class="record-row">
-        <p class="label">Doctor:</p>
-        <p class="value" th:text="'Dr. ' + ${record.lastName}"></p>
-      </div>
-      <div class="record-row">
-        <p class="label">Treatment:</p>
-        <p class="value" th:text="'Dr. ' + ${record.treatment}"></p>
-
-        <p class="label right-label">Date:</p>
-        <p th:text="${#temporals.format(record.date, 'dd MMM yyyy')}"></p>
-      </div>
-      <div class="record-row full-width">
-        <p class="label">Diagnosis:</p>
-        <p class="value" th:text="${record.diagnosis}"></p>
-      </div>
+        <div class="record-row">
+            <strong>Doctor:</strong>
+            <p th:text="${record.doctorLastName}"></p>
+            <strong>Treatment:</strong>
+            <p th:text="${record.diagnosis}"></p>
+            <strong>Date:</strong>
+            <p th:text="${#temporals.format(record.date, 'dd MMM yyyy', T(java.util.Locale).ENGLISH)}"></p>
+            <strong>Diagnosis:</strong>
+            <p th:text="${record.treatment}"></p>
+        </div>
     </div>
-  </div>
 </div>
 </body>
 </html>

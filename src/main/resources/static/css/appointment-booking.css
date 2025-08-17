@@ -1,32 +1,43 @@
+.slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
 .slot-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
-  margin: 4px 6px 4px 0;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+    position: relative;
+    cursor: pointer;
 }
 
-.slot-btn:hover:not(:disabled) {
-  background-color: #0056b3;
+.slot-btn input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
 }
 
-.slot-btn.booked {
-  background-color: #dc3545;
-  color: #fff;
-  cursor: not-allowed;
-  box-shadow: none;
-  opacity: 0.6;
-  text-decoration: line-through;
-  pointer-events: none;
+.slot-btn span {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f8f9fa;
+    color: #333;
+    transition: all 0.2s ease-in-out;
 }
 
-.slot-btn input[type="radio"]:checked + span {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
+.slot-btn:not(.booked):hover span {
+    background-color: #e2e6ea;
+}
+
+.slot-btn input:checked + span {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.slot-btn.booked span {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+    color: #888;
+    cursor: not-allowed;
 }

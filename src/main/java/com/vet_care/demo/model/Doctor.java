@@ -19,6 +19,15 @@ public class Doctor extends AbstractUser {
     @OneToMany(mappedBy = "doctor")
     private List<AvailableSlot> availableSlots = new ArrayList<>();
 
+    public Doctor(String firstName, String lastName, String email, String password, String specialization) {
+        super(firstName, lastName, email, password);
+        this.specialization = specialization;
+    }
+
+    public Doctor() {
+        super();
+    }
+
     public String getSpecialization() {
         return specialization;
     }

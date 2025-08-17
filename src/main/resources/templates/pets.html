@@ -5,6 +5,7 @@
     <title>Pets</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/records.css">
     <link rel="stylesheet" href="/css/pets.css">
     <link rel="stylesheet" href="/css/edit.css">
     <link rel="stylesheet" href="/css/cards.css">
@@ -14,7 +15,7 @@
     <a href="/dashboard">Dashboard</a>
     <a href="/appointments">Appointments</a>
     <div class="nav-item active">Pets</div>
-    <form action="/logout" method="post" style="margin-left: auto;">
+    <form action="/logout" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <button type="submit" class="logout">Logout</button>
     </form>
@@ -29,23 +30,32 @@
                 <button type="submit" class="add-btn">Medical Records</button>
             </form>
         </div>
-        Species: <span class="species-span" th:text="${pet.species}"></span> ·
-        Gender: <span class="gender-span" th:text="${pet.gender}"></span> ·
-        Age: <span class="age-span" th:text="${pet.age}"></span> ·
-        Birth Date: <span class="birthDate-span" th:text="${pet.birthDate}"></span>
+        <div class="record-card">
+            <div class="record-row">
+                <strong>Species:</strong>
+                <span class="species-span" th:text="${pet.species}"></span>
+                <strong>Gender:</strong>
+                <span class="gender-span" th:text="${pet.gender}"></span>
+                <strong>Age:</strong>
+                <span class="age-span" th:text="${pet.age}"></span>
+                <p class="label">Birth Date:</p>
+                <span class="birthDate-span" th:text="${#temporals.format(pet.birthDate, 'dd MMM yyyy', T(java.util.Locale).ENGLISH)}"></span>
+            </div>
+        </div>
+
         <div class="pet-actions">
             <button type="button" class="edit-btn" onclick="showEditForm(this)">Edit</button>
             <form th:action="@{/pets/{id}(id=${pet.id})}" method="post" style="display:inline;">
                 <input type="hidden" name="_method" value="DELETE" />
-                <button type="submit" class="delete-btn">Delete</button>
+                <button type="submit" class="edit-btn">Delete</button>
             </form>
         </div>
     </div>
     <button class="add-btn add-button" type="button" onclick="showAddForm()">Add Pet</button>
 </div>
 
-<div id="editFormContainer" style="display: none; margin-top: 10px;">
-    <form id="editForm" th:action="@{/pets}" method="post">
+<div id="editFormContainer" class="editFormContainer">
+    <form id="editForm"  th:action="@{/pets}" method="post">
         <label>Name</label>
         <input type="text" id="edit-name" name="name" required minlength="2" pattern="^[A-Za-z\s\-]+$"/>
         <p id="name-error" style="color: red; display: none;">Invalid name format</p>
@@ -60,17 +70,15 @@
             <option value="Male">Male</option>
             <option value="Female">Female</option>
         </select>
-        <label>Birth Date</label>
-        <input type="text" id="edit-birthDate" name="birthDate" placeholder="YYYY-MM-DD" required />
+        <label>Date of Birth</label>
+        <input type="hidden" id="edit-birthDate" name="birthDate" required />
         <div class="form-actions">
             <button type="submit" class="save-btn">Apply</button>
             <button type="button" class="cancel-btn" onclick="cancelEdit()">Cancel</button>
         </div>
     </form>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="/js/validation.js"></script>
 <script src="/js/pets.js"></script>
 </body>
 </html>

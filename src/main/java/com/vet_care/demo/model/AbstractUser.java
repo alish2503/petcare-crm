@@ -37,6 +37,15 @@ public abstract class AbstractUser {
     @NotBlank(message = "Password is required")
     private String password;
 
+    public AbstractUser() {}
+
+    public AbstractUser(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
+
     public Long getId() { return id; }
 
     public String getEmail() {

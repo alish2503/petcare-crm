@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -34,33 +33,25 @@ public class PetsController {
     }
 
     @PostMapping
-    public String createPet(@AuthenticationPrincipal CustomUserDetails userDetails,
-                            @ModelAttribute @Valid Pet pet,
-                            BindingResult result) {
-        if (result.hasErrors()) {
-            return "pets";
-        }
+    public String createPet(@AuthenticationPrincipal CustomUserDetails userDetails, @ModelAttribute @Valid Pet pet) {
+
         PetUser owner = userDetails.getUser();
         petService.createPet(owner, pet);
         return "redirect:/pets";
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("@petSecurity.isOwner(#id, principal)")
+    @PreAuthorize("@ownershipSecurityService.isOwner(#id, principal)")
     public String updatePet(@AuthenticationPrincipal CustomUserDetails userDetails,
-                            @PathVariable Long id,
-                            @ModelAttribute @Valid Pet pet,
-                            BindingResult result) {
-        if (result.hasErrors()) {
-            return "redirect:/pets";
-        }
+                            @PathVariable Long id, @ModelAttribute @Valid Pet pet) {
+
         PetUser owner = userDetails.getUser();
         petService.updatePet(id, pet, owner);
         return "redirect:/pets";
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("@petSecurity.isOwner(#id, principal)")
+    @PreAuthorize("@ownershipSecurityService.isOwner(#id, principal)")
     public String deletePet(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
         PetUser owner = userDetails.getUser();
         petService.deletePet(id, owner);

@@ -28,19 +28,20 @@ public class AppointmentController {
     }
 
     @PostMapping
-    @PreAuthorize("@ownershipSecurityService.isPetOwner(#petId, principal)")
-    public String addAppointment(@ModelAttribute @Valid Appointment appointment,
+    @PreAuthorize("@ownershipSecurityService.isOwner(#petId, principal)")
+    public String addAppointment(@RequestParam String reason,
                                  @RequestParam Long petId,
                                  @RequestParam Long doctorId,
                                  @RequestParam Long slotId) {
 
-        appointmentService.addAppointment(appointment, petId, doctorId, slotId);
+        appointmentService.addAppointment(reason, petId, doctorId, slotId);
         return "redirect:/appointments";
     }
 
     @DeleteMapping("/{id}")
-    public String deleteAppointment(@PathVariable Long id) {
-        appointmentService.deleteAppointment(id);
+    public String deleteAppointment(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        PetUser user = userDetails.getUser();
+        appointmentService.deleteAppointment(id, user);
         return "redirect:/appointments";
     }
 }

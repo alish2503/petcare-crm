@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Error</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/common-frames.css">
 </head>
-<body>
-    <h1>Something went wrong</h1>
-    <p th:text="${errorMessage}">Error message</p>
-    <a href="/vetcare">Back to Home</a>
+<body class="full-height-page">
+<div class="form-container">
+    <h2>Something went wrong</h2>
+    <p class="errorMessage" th:text="${errorMessage}">An unexpected error occurred.</p>
+    <a href="/vetcare" class="btn red-button">Back to Home</a>
+</div>
 </body>
 </html>

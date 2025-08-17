@@ -1,22 +1,25 @@
+const form = document.getElementById('editForm');
+const formContainer = document.getElementById('editFormContainer');
+const nameInput = document.getElementById('edit-name');
+const speciesSelect = document.getElementById('edit-species');
+const genderSelect = document.getElementById('edit-gender');
+const birthDateInput = document.getElementById('edit-birthDate');
+
 document.addEventListener("DOMContentLoaded", () => {
-  const editForm = document.getElementById('editForm');
-  const nameInput = document.getElementById('edit-name');
-  const nameError = document.getElementById('name-error');
-
-  flatpickr("#edit-birthDate", {
+  flatpickr(birthDateInput, {
     dateFormat: "Y-m-d",
-    maxDate: "today"
+    altInput: true,
+    altFormat: "d M Y",
+    maxDate: "today",
+    allowInput: false
   });
+});
 
-  nameInput?.addEventListener('input', () => {
-    validateField(nameInput, nameError);
-  });
-
-  editForm?.addEventListener('submit', (e) => {
-    const fieldsToValidate = [{ input: nameInput, error: nameError }];
-    const isValid = validateFormFields(fieldsToValidate);
-    if (!isValid) e.preventDefault();
-  });
+form.addEventListener("submit", (e) => {
+  if (!birthDateInput.value || birthDateInput.value.trim() === "") {
+    e.preventDefault();
+    alert("Please select a date of birth");
+  }
 });
 
 function showEditForm(button) {
@@ -27,9 +30,6 @@ function showEditForm(button) {
   const species = card.querySelector('.species-span').textContent.trim();
   const gender = card.querySelector('.gender-span').textContent.trim();
   const birthDate = card.querySelector('.birthDate-span').textContent.trim();
-
-  const formContainer = document.getElementById('editFormContainer');
-  const form = document.getElementById('editForm');
 
   form.action = `/pets/${petId}`;
 
@@ -42,11 +42,11 @@ function showEditForm(button) {
   }
   methodInput.value = "PUT";
 
-  document.getElementById('edit-name').value = name;
-  document.getElementById('edit-species').value = species;
-  document.getElementById('edit-gender').value = gender;
+  nameInput.value = name;
+  speciesSelect.value = species;
+  genderSelect.value = gender;
 
-  const flatpickrInstance = document.getElementById('edit-birthDate')._flatpickr;
+  const flatpickrInstance = birthDateInput._flatpickr;
   if (flatpickrInstance) {
     flatpickrInstance.setDate(birthDate);
   }
@@ -56,9 +56,6 @@ function showEditForm(button) {
 }
 
 function showAddForm() {
-  const formContainer = document.getElementById('editFormContainer');
-  const form = document.getElementById('editForm');
-
   form.action = "/pets";
 
   const methodInput = form.querySelector('input[name="_method"]');
@@ -66,11 +63,11 @@ function showAddForm() {
     methodInput.remove();
   }
 
-  document.getElementById('edit-name').value = '';
-  document.getElementById('edit-species').value = 'Dog';
-  document.getElementById('edit-gender').value = 'Male';
+  nameInput.value = '';
+  speciesSelect.value = 'Dog';
+  genderSelect.value = 'Male';
 
-  const flatpickrInstance = document.getElementById('edit-birthDate')._flatpickr;
+  const flatpickrInstance = birthDateInput._flatpickr;
   if (flatpickrInstance) {
     flatpickrInstance.clear();
   }
@@ -80,7 +77,7 @@ function showAddForm() {
 }
 
 function cancelEdit() {
-    const formContainer = document.getElementById('editFormContainer');
-    document.getElementById('editFormContainer').style.display = 'none';
-    document.getElementById('petList').appendChild(formContainer);
+  formContainer.style.display = 'none';
+  document.getElementById('petList').appendChild(formContainer);
 }
+

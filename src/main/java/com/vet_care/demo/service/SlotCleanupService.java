@@ -22,10 +22,7 @@ public class SlotCleanupService {
     @Scheduled(cron = "0 0 3 * * *")
     public void cleanOldSlots() {
         LocalDateTime now = LocalDateTime.now();
-
         List<AvailableSlot> oldSlots = slotRepository.findAllByDateTimeBeforeAndBookedFalse(now);
-
         slotRepository.deleteAll(oldSlots);
-
     }
 }

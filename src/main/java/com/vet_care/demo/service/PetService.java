@@ -1,7 +1,10 @@
 package com.vet_care.demo.service;
 
+import com.vet_care.demo.model.AvailableSlot;
 import com.vet_care.demo.model.Pet;
 import com.vet_care.demo.model.PetUser;
+import com.vet_care.demo.repository.AppointmentRepository;
+import com.vet_care.demo.repository.AvailableSlotRepository;
 import com.vet_care.demo.repository.PetRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -15,9 +18,11 @@ import java.util.List;
 public class PetService {
 
     private final PetRepository petRepository;
+    private final AvailableSlotRepository availableSlotRepository;
 
-    public PetService(PetRepository petRepository) {
+    public PetService(PetRepository petRepository, AvailableSlotRepository availableSlotRepository) {
         this.petRepository = petRepository;
+        this.availableSlotRepository = availableSlotRepository;
     }
 
     @Cacheable("pets")
@@ -56,6 +61,7 @@ public class PetService {
 
     public void deletePet(Long id, PetUser owner) {
         owner.getPets().removeIf(p -> p.getId().equals(id));
+        availableSlotRepository.resetSlotsForPet(id);
         petRepository.deleteById(id);
     }
 }

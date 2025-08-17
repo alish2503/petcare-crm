@@ -26,7 +26,7 @@ public class MedicalRecordController {
     }
 
     @GetMapping("/medical-records/{petId}")
-    @PreAuthorize("@ownershipSecurityService.isPetOwner(#petId, principal)")
+    @PreAuthorize("@ownershipSecurityService.isOwner(#petId, principal)")
     public String listMedicalRecordsForPet(@PathVariable Long petId, Model model) {
         String petName = medicalRecordService.getPetName(petId);
         List<MedicalRecordsPageProjection> projections = medicalRecordService.getMedicalRecordsByPetId(petId);

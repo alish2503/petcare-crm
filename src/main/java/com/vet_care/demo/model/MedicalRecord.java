@@ -19,4 +19,13 @@ public class MedicalRecord {
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
+
+    public MedicalRecord() {}
+    public MedicalRecord(String diagnosis, String treatment, LocalDate date, Pet pet, Doctor doctor) {
+        this.diagnosis = diagnosis;
+        this.treatment = treatment;
+        this.date = date;
+        this.pet = pet;
+        this.doctor = doctor;
+    }
 }

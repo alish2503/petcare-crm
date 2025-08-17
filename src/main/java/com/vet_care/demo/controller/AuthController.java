@@ -37,10 +37,8 @@ public class AuthController {
         if (result.hasErrors()) {
             return "register-form";
         }
-
         return "redirect:/dashboard";
     }
-
 
     @GetMapping("/dashboard")
     public String showDashboard(@AuthenticationPrincipal CustomUserDetails currentUser, Model model) {
@@ -53,14 +51,12 @@ public class AuthController {
         if (error != null) {
             model.addAttribute("loginError", "Invalid username or password");
         }
-
         return "login-form";
     }
 
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
         model.addAttribute("owner", new PetUser());
-
         return "register-form";
     }
 }

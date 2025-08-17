@@ -1,22 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('form.appointment-form').forEach(form => {
-    const reasonInput = form.querySelector('input[name="reason"]');
-    const reasonError = form.querySelector('.reason-error');
-
-    if (reasonInput && reasonError) {
-      reasonInput.addEventListener('input', () => {
-        validateField(reasonInput, reasonError);
-      });
-
-      form.addEventListener('submit', e => {
-        const isValid = validateFormFields([{ input: reasonInput, error: reasonError }]);
-        if (!isValid) e.preventDefault();
-      });
-    }
-  });
-});
-
-function toggleForm(vetId) {
+function toggleForm(doctorId) {
   const form = document.getElementById(`form-${doctorId}`);
   if (!form) return;
 
