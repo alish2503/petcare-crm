@@ -54,16 +54,16 @@ public class AppointmentService {
         return appointmentRepository.save(new Appointment(reason, pet, doctor, slot));
     }
 
-    public List<AppointmentsPageProjection> getAppointmentsForUser(PetUser user) {
+    public List<AppointmentsPageProjection> getAppointmentsForUser(PetOwner user) {
         return appointmentRepository.findUpcomingAppointments(user, LocalDateTime.now());
     }
 
     @Transactional
-    public void deleteAppointment(Long appointmentId, PetUser user) {
+    public void deleteAppointment(Long appointmentId, PetOwner user) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new IllegalArgumentException("Appointment not found"));
 
-        PetUser owner = appointment.getPet().getOwner();
+        PetOwner owner = appointment.getPet().getOwner();
         if (!owner.getId().equals(user.getId())) {
             throw new SecurityException("You are not allowed to delete this appointment");
         }

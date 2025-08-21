@@ -1,6 +1,6 @@
 package com.vet_care.demo.repository;
 
-import com.vet_care.demo.dto.FlatDoctorSlot;
+import com.vet_care.demo.dto.FlatDoctorSlotDto;
 import com.vet_care.demo.model.Doctor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,19 +15,21 @@ import java.util.List;
  */
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
+
     @Query("""
-        SELECT 
-            d.id AS doctorId,
-            d.lastName AS lastName,
-            d.specialization AS specialization,
-            s.id AS slotId,
-            s.dateTime AS dateTime,
-            s.booked AS booked
-            FROM Doctor d
-            JOIN d.availableSlots s
-            WHERE s.dateTime > :now
-            ORDER BY d.id, s.dateTime
+        SELECT new com.vet_care.demo.dto.FlatDoctorSlotDto(
+            d.id,
+            d.lastName,
+            d.specialization,
+            s.id,
+            s.dateTime,
+            s.booked
+        )
+        FROM Doctor d
+        JOIN d.availableSlots s
+        WHERE s.dateTime > :now
+        ORDER BY d.id, s.dateTime
         """)
-    List<FlatDoctorSlot> findAllFutureDoctorSlotsFlat(@Param("now") LocalDateTime now);
+    List<FlatDoctorSlotDto> findAllFutureDoctorSlotsFlat(@Param("now") LocalDateTime now);
 
 }

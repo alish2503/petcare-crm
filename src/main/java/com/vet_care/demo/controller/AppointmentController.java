@@ -3,7 +3,6 @@ package com.vet_care.demo.controller;
 import com.vet_care.demo.model.*;
 import com.vet_care.demo.security.CustomUserDetails;
 import com.vet_care.demo.service.AppointmentService;
-import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,7 +21,7 @@ public class AppointmentController {
 
     @GetMapping
     public String listAppointments(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
-        PetUser owner = userDetails.getUser();
+        PetOwner owner = userDetails.getUser();
         model.addAttribute("appointmentsPageProjections", appointmentService.getAppointmentsForUser(owner));
         return "appointments";
     }
@@ -40,7 +39,7 @@ public class AppointmentController {
 
     @DeleteMapping("/{id}")
     public String deleteAppointment(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        PetUser user = userDetails.getUser();
+        PetOwner user = userDetails.getUser();
         appointmentService.deleteAppointment(id, user);
         return "redirect:/appointments";
     }

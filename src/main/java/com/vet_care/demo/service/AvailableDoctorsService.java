@@ -1,7 +1,7 @@
 package com.vet_care.demo.service;
 
 import com.vet_care.demo.dto.DoctorDTO;
-import com.vet_care.demo.dto.FlatDoctorSlot;
+import com.vet_care.demo.dto.FlatDoctorSlotDto;
 import com.vet_care.demo.repository.DoctorRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,27 +16,27 @@ import java.util.Map;
  */
 
 @Service
-public class AvailableSlotService {
+public class AvailableDoctorsService {
 
     private final DoctorRepository doctorRepository;
 
-    public AvailableSlotService(DoctorRepository doctorRepository) {
+    public AvailableDoctorsService(DoctorRepository doctorRepository) {
         this.doctorRepository = doctorRepository;
     }
 
     public List<DoctorDTO> getDoctorsWithAvailableFutureSlots() {
-        List<FlatDoctorSlot> flatList = doctorRepository.findAllFutureDoctorSlotsFlat(LocalDateTime.now());
+        List<FlatDoctorSlotDto> flatList = doctorRepository.findAllFutureDoctorSlotsFlat(LocalDateTime.now());
         Map<Long, DoctorDTO> map = new LinkedHashMap<>();
-        for (FlatDoctorSlot row : flatList) {
-            DoctorDTO doc = map.computeIfAbsent(row.getDoctorId(), id -> {
+        for (FlatDoctorSlotDto row : flatList) {
+            DoctorDTO doc = map.computeIfAbsent(row.doctorId(), id -> {
                 DoctorDTO d = new DoctorDTO();
-                d.setId(row.getDoctorId());
-                d.setLastName(row.getLastName());
-                d.setSpecialization(row.getSpecialization());
+                d.setId(row.doctorId());
+                d.setLastName(row.lastName());
+                d.setSpecialization(row.specialization());
                 return d;
             });
             doc.getAvailableSlots().add(new DoctorDTO.SlotDTO(
-                    row.getSlotId(), row.getDateTime(), row.isBooked()
+                    row.slotId(), row.dateTime(), row.booked()
             ));
         }
         return new ArrayList<>(map.values());

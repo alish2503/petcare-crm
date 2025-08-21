@@ -17,10 +17,11 @@ import java.util.List;
 
 @Repository
 public interface AvailableSlotRepository extends JpaRepository<AvailableSlot, Long> {
+
     List<AvailableSlot> findAllByDateTimeBeforeAndBookedFalse(LocalDateTime dateTime);
 
     @Transactional
-    @Modifying
+    @Modifying()
     @Query("UPDATE AvailableSlot s SET s.booked = false WHERE s.id IN " +
             "(SELECT a.slot.id FROM Appointment a WHERE a.pet.id = :petId)")
     void resetSlotsForPet(@Param("petId") Long petId);

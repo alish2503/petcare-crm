@@ -1,12 +1,10 @@
 package com.vet_care.demo.controller;
 
-import com.vet_care.demo.model.PetUser;
-import com.vet_care.demo.security.CustomUserDetails;
+import com.vet_care.demo.model.PetOwner;
 import com.vet_care.demo.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,16 +22,16 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @GetMapping("/vetcare")
+    @GetMapping("/")
     public String entryPoint() {
         return "redirect:/dashboard";
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("owner") @Valid PetUser user,
+    public String registerUser(@ModelAttribute("owner") @Valid PetOwner user,
                                BindingResult result, HttpServletRequest request) throws ServletException {
 
-        PetUser savedUser = userService.registerAndLoginUser(user, result, request);
+        PetOwner savedUser = userService.registerAndLoginUser(user, result, request);
         if (result.hasErrors()) {
             return "register-form";
         }
@@ -41,8 +39,7 @@ public class AuthController {
     }
 
     @GetMapping("/dashboard")
-    public String showDashboard(@AuthenticationPrincipal CustomUserDetails currentUser, Model model) {
-        model.addAttribute("firstName", currentUser.getUser().getFirstName());
+    public String showDashboard() {
         return "dashboard";
     }
 
@@ -56,7 +53,7 @@ public class AuthController {
 
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
-        model.addAttribute("owner", new PetUser());
+        model.addAttribute("owner", new PetOwner());
         return "register-form";
     }
 }

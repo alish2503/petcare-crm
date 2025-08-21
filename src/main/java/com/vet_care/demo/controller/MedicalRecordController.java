@@ -1,13 +1,7 @@
 package com.vet_care.demo.controller;
 
 import com.vet_care.demo.dto.MedicalRecordsPageProjection;
-import com.vet_care.demo.model.MedicalRecord;
-import com.vet_care.demo.model.Pet;
-import com.vet_care.demo.model.PetUser;
-import com.vet_care.demo.repository.MedicalRecordRepository;
-import com.vet_care.demo.repository.PetRepository;
 import com.vet_care.demo.service.MedicalRecordService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

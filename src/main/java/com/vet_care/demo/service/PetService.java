@@ -1,9 +1,7 @@
 package com.vet_care.demo.service;
 
-import com.vet_care.demo.model.AvailableSlot;
 import com.vet_care.demo.model.Pet;
-import com.vet_care.demo.model.PetUser;
-import com.vet_care.demo.repository.AppointmentRepository;
+import com.vet_care.demo.model.PetOwner;
 import com.vet_care.demo.repository.AvailableSlotRepository;
 import com.vet_care.demo.repository.PetRepository;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,18 +29,23 @@ public class PetService {
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
     }
 
-    public List<Pet> getPetsByOwner(PetUser owner) {
+    public List<Pet> getPetsByOwner(PetOwner owner) {
         return owner.getPets();
     }
 
-    public Pet createPet(PetUser owner, Pet pet) {
+    public Pet createPet(PetOwner owner, Pet pet) {
+        if (pet.getId() != null) {
+            throw new IllegalArgumentException(
+                    "Cannot create pet with existing ID. Use updatePet for existing pets."
+            );
+        }
         pet.setOwner(owner);
         Pet createdPet = petRepository.save(pet);
         owner.getPets().add(createdPet);
         return createdPet;
     }
 
-    public Pet updatePet(Long id, Pet petData, PetUser owner) {
+    public Pet updatePet(Long id, Pet petData, PetOwner owner) {
         Pet updatedPet = petRepository.findById(id)
                 .map(existingPet -> {
                     existingPet.setName(petData.getName());
@@ -59,7 +62,7 @@ public class PetService {
         return updatedPet;
     }
 
-    public void deletePet(Long id, PetUser owner) {
+    public void deletePet(Long id, PetOwner owner) {
         owner.getPets().removeIf(p -> p.getId().equals(id));
         availableSlotRepository.resetSlotsForPet(id);
         petRepository.deleteById(id);

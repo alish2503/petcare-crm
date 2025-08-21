@@ -12,13 +12,13 @@ import java.time.LocalDateTime;
  */
 @Entity
 public class AvailableSlot {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull(message = "Date is required")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    @Future(message = "Slot for appointment must be in the future")
     private LocalDateTime dateTime;
     private boolean booked = false;
 
@@ -32,6 +32,10 @@ public class AvailableSlot {
         this.doctor = doctor;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public LocalDateTime getDateTime() {
         return dateTime;
     }
@@ -42,5 +46,13 @@ public class AvailableSlot {
 
     public void setBooked(boolean booked) {
         this.booked = booked;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 }

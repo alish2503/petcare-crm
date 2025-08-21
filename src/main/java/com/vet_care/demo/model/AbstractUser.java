@@ -15,6 +15,7 @@ import jakarta.validation.constraints.Size;
 
 @MappedSuperclass
 public abstract class AbstractUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -62,6 +63,10 @@ public abstract class AbstractUser {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setFirstName(String firstName) {

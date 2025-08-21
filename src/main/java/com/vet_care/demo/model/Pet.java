@@ -21,9 +21,11 @@ public class Pet {
     private String name;
 
     @Pattern(regexp = "^(Dog|Cat|Bird)$", message = "Species must be dog, cat or bird")
+    @NotBlank(message = "Species is required")
     private String species;
 
     @Pattern(regexp = "^(Male|Female)$", message = "Gender must be male or female")
+    @NotBlank(message = "Gender is required")
     private String gender;
 
     @NotNull(message = "Birth date is required")
@@ -33,7 +35,7 @@ public class Pet {
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private PetUser owner;
+    private PetOwner owner;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointment> appointments = new ArrayList<>();
@@ -43,7 +45,7 @@ public class Pet {
 
     public Pet() {}
 
-    public Pet(String name, String species, String gender, LocalDate birthDate, PetUser owner) {
+    public Pet(String name, String species, String gender, LocalDate birthDate, PetOwner owner) {
         this.name = name;
         this.species = species;
         this.gender = gender;
@@ -77,13 +79,13 @@ public class Pet {
 
     public Long getId() { return id; }
 
-    public PetUser getOwner() { return owner; }
+    public PetOwner getOwner() { return owner; }
 
     public List<Appointment> getAppointments() {
         return appointments;
     }
 
-    public void setOwner(PetUser owner) { this.owner = owner; }
+    public void setOwner(PetOwner owner) { this.owner = owner; }
 
     public void setId(Long id) {
         this.id = id;

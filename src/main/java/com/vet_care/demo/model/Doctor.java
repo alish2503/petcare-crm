@@ -39,4 +39,7 @@ public class Doctor extends AbstractUser {
     public void setAvailableSlots(List<AvailableSlot> availableSlots) {
         this.availableSlots = availableSlots;
     }
+
+    public void setSpecialization(String surgeon) {
+    }
 }

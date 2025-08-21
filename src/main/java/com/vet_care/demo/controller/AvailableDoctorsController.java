@@ -1,9 +1,9 @@
 package com.vet_care.demo.controller;
 
 import com.vet_care.demo.dto.DoctorDTO;
-import com.vet_care.demo.model.PetUser;
+import com.vet_care.demo.model.PetOwner;
 import com.vet_care.demo.security.CustomUserDetails;
-import com.vet_care.demo.service.AvailableSlotService;
+import com.vet_care.demo.service.AvailableDoctorsService;
 import com.vet_care.demo.service.PetService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -16,23 +16,23 @@ import java.util.List;
  */
 
 @Controller
-public class AvailableSlotsController {
+public class AvailableDoctorsController {
 
-    private final AvailableSlotService availableSlotService;
+    private final AvailableDoctorsService availableDoctorsService;
     private final PetService petService;
 
-    public AvailableSlotsController(AvailableSlotService availableSlotService,
-                                    PetService petService) {
+    public AvailableDoctorsController(AvailableDoctorsService availableDoctorsService,
+                                      PetService petService) {
 
-        this.availableSlotService = availableSlotService;
+        this.availableDoctorsService = availableDoctorsService;
         this.petService = petService;
     }
 
-    @GetMapping("/availableSlots")
-    public String showAvailableSlots(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+    @GetMapping("/availableDoctors")
+    public String showAvailableDoctors(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
 
-        PetUser owner = userDetails.getUser();
-        List<DoctorDTO> doctorDTOs = availableSlotService.getDoctorsWithAvailableFutureSlots();
+        PetOwner owner = userDetails.getUser();
+        List<DoctorDTO> doctorDTOs = availableDoctorsService.getDoctorsWithAvailableFutureSlots();
 
         model.addAttribute("doctorDTOs", doctorDTOs);
         model.addAttribute("pets", petService.getPetsByOwner(owner));

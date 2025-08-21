@@ -1,7 +1,7 @@
 package com.vet_care.demo.controller;
 
 import com.vet_care.demo.model.Pet;
-import com.vet_care.demo.model.PetUser;
+import com.vet_care.demo.model.PetOwner;
 import com.vet_care.demo.security.CustomUserDetails;
 import com.vet_care.demo.service.PetService;
 import jakarta.validation.Valid;
@@ -27,7 +27,7 @@ public class PetsController {
 
     @GetMapping
     public String listPets(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
-        PetUser owner = userDetails.getUser();
+        PetOwner owner = userDetails.getUser();
         model.addAttribute("pets", petService.getPetsByOwner(owner));
         return "pets";
     }
@@ -35,7 +35,7 @@ public class PetsController {
     @PostMapping
     public String createPet(@AuthenticationPrincipal CustomUserDetails userDetails, @ModelAttribute @Valid Pet pet) {
 
-        PetUser owner = userDetails.getUser();
+        PetOwner owner = userDetails.getUser();
         petService.createPet(owner, pet);
         return "redirect:/pets";
     }
@@ -45,7 +45,7 @@ public class PetsController {
     public String updatePet(@AuthenticationPrincipal CustomUserDetails userDetails,
                             @PathVariable Long id, @ModelAttribute @Valid Pet pet) {
 
-        PetUser owner = userDetails.getUser();
+        PetOwner owner = userDetails.getUser();
         petService.updatePet(id, pet, owner);
         return "redirect:/pets";
     }
@@ -53,7 +53,7 @@ public class PetsController {
     @DeleteMapping("/{id}")
     @PreAuthorize("@ownershipSecurityService.isOwner(#id, principal)")
     public String deletePet(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        PetUser owner = userDetails.getUser();
+        PetOwner owner = userDetails.getUser();
         petService.deletePet(id, owner);
         return "redirect:/pets";
     }

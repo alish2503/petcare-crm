@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Appointment {
+
     @Id
     @GeneratedValue
     private Long id;
@@ -37,12 +38,20 @@ public class Appointment {
         this.slot = slot;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
     public Pet getPet() {
         return pet;
     }
 
     public AvailableSlot getSlot() {
         return slot;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setPet(Pet pet) {

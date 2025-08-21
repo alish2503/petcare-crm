@@ -5,6 +5,7 @@ import com.vet_care.demo.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
@@ -14,10 +15,11 @@ import java.time.LocalDateTime;
  * @author Alish
  */
 @Configuration
+@Profile("test")
 public class DataInitializer {
     @Bean
     CommandLineRunner initData(
-            PetUserRepository petUserRepository,
+            PetOwnerRepository petUserRepository,
             DoctorRepository doctorRepository,
             PetRepository petRepository,
             MedicalRecordRepository medicalRecordRepository,
@@ -27,26 +29,40 @@ public class DataInitializer {
     ) {
         return args -> {
             // --- USERS ---
-            PetUser user1 = new PetUser("John", "Doe", "john@example.com",
+            PetOwner user1 = new PetOwner("John", "Doe", "john@example.com",
                     passwordEncoder.encode("password123"));
-            PetUser user2 = new PetUser("Emily", "Clark", "emily@example.com",
+            PetOwner user2 = new PetOwner("Emily", "Clark", "emily@example.com",
                     passwordEncoder.encode("mypassword"));
             petUserRepository.save(user1);
             petUserRepository.save(user2);
 
             // --- DOCTORS ---
-            Doctor d1 = new Doctor("Alice", "Smith", "alice@vet.com", "not_used", "Cardiology");
-            Doctor d2 = new Doctor("Bob", "Brown", "bob@vet.com", "not_used", "Dermatology");
-            Doctor d3 = new Doctor("Clara", "Johnson", "clara@vet.com", "not_used", "Surgery");
+            Doctor d1 = new Doctor("Alice", "Smith", "alice@vet.com",
+                    "not_used", "Cardiology");
+
+            Doctor d2 = new Doctor("Bob", "Brown", "bob@vet.com",
+                    "not_used", "Dermatology");
+
+            Doctor d3 = new Doctor("Clara", "Johnson", "clara@vet.com",
+                    "not_used", "Surgery");
+
             doctorRepository.save(d1);
             doctorRepository.save(d2);
             doctorRepository.save(d3);
 
             // --- PETS ---
-            Pet p1 = new Pet("Fluffy", "Cat", "Female", LocalDate.of(2020, 5, 12), user1);
-            Pet p2 = new Pet("Bella", "Dog", "Female", LocalDate.of(2019, 3, 7), user2);
-            Pet p3 = new Pet("Rocky", "Dog", "Male", LocalDate.of(2018, 11, 22), user1);
-            Pet p4 = new Pet("Milo", "Bird", "Male", LocalDate.of(2021, 9, 10), user2);
+            Pet p1 = new Pet("Fluffy", "Cat", "Female",
+                    LocalDate.of(2020, 5, 12), user1);
+
+            Pet p2 = new Pet("Bella", "Dog", "Female",
+                    LocalDate.of(2019, 3, 7), user2);
+
+            Pet p3 = new Pet("Rocky", "Dog", "Male",
+                    LocalDate.of(2018, 11, 22), user1);
+
+            Pet p4 = new Pet("Milo", "Bird", "Male",
+                    LocalDate.of(2021, 9, 10), user2);
+
             petRepository.save(p1);
             petRepository.save(p2);
             petRepository.save(p3);
@@ -61,10 +77,21 @@ public class DataInitializer {
                     LocalDate.of(2025, 8, 10), p4, d3));
 
             // --- AVAILABLE SLOTS ---
-            AvailableSlot s1 = new AvailableSlot(LocalDateTime.of(2025, 8, 20, 10, 0), true, d1);
-            AvailableSlot s2 = new AvailableSlot(LocalDateTime.of(2025, 8, 20, 11, 0), false, d1);
-            AvailableSlot s3 = new AvailableSlot(LocalDateTime.of(2025, 8, 21, 9, 30), true, d2);
-            AvailableSlot s4 = new AvailableSlot(LocalDateTime.of(2025, 8, 22, 15, 0), false, d3);
+            AvailableSlot s1 = new AvailableSlot(LocalDateTime.of(
+                    2025, 8, 22, 10, 0), true, d1
+            );
+
+            AvailableSlot s2 = new AvailableSlot(LocalDateTime.of(
+                    2025, 8, 24, 11, 0), false, d1
+            );
+            AvailableSlot s3 = new AvailableSlot(LocalDateTime.of(
+                    2025, 8, 25, 9, 30), true, d2
+            );
+
+            AvailableSlot s4 = new AvailableSlot(LocalDateTime.of(
+                    2025, 8, 26, 15, 0), false, d3
+            );
+
             availableSlotRepository.save(s1);
             availableSlotRepository.save(s2);
             availableSlotRepository.save(s3);

@@ -6,19 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class PetUser extends AbstractUser {
+public class PetOwner extends AbstractUser {
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pet> pets = new ArrayList<>();
 
-    public PetUser() {
+    public PetOwner() {
         super();
     }
-    public PetUser(String firstName, String lastName, String email, String password) {
+    public PetOwner(String firstName, String lastName, String email, String password) {
         super(firstName, lastName, email, password);
     }
 
     public List<Pet> getPets() {
         return pets;
     }
+
 }

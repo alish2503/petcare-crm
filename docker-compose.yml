@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: petcare-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: petcare
+      POSTGRES_USER: petuser
+      POSTGRES_PASSWORD: petpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
