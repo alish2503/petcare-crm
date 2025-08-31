@@ -35,11 +35,11 @@ public class MedicalRecordController {
         return "medical-records";
     }
 
-    @PostMapping
+    @PostMapping("/{petId}")
     @PreAuthorize("hasRole('DOCTOR') and @ownershipSecurityService.isDoctorWithAppointment(#petId, principal)")
     public String createMedicalRecord(@AuthenticationPrincipal CustomUserDetails userDetails,
                                       @ModelAttribute @Valid MedicalRecord medicalRecord,
-                                      @RequestParam Long petId) {
+                                      @PathVariable Long petId) {
 
         Doctor doctor = (Doctor)userDetails.user();
         medicalRecordService.createMedicalRecord(doctor, medicalRecord, petId);

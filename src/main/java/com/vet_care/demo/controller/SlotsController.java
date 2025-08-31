@@ -29,7 +29,7 @@ public class SlotsController {
     }
 
     @PostMapping
-    String addSlot(@RequestParam("slots") List<String> dateTimes) {
+    String addSlots(@RequestParam("slots") List<String> dateTimes) {
         slotService.addSlotsForCurrentDoctor(dateTimes);
         return "redirect:/doctor-slots";
     }
