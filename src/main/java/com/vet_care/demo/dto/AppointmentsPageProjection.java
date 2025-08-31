@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
  */
 public interface AppointmentsPageProjection {
     Long getId();
-    String getPetName();
-    String getDoctorLastName();
-    LocalDateTime getDateTime();
     String getReason();
+    String getPetName();
+    String getOtherPartyName();
+    LocalDateTime getSlotDateTime();
 }

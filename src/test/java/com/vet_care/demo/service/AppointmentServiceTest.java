@@ -4,12 +4,17 @@ import com.vet_care.demo.model.*;
 import com.vet_care.demo.repository.AppointmentRepository;
 import com.vet_care.demo.repository.AvailableSlotRepository;
 import com.vet_care.demo.repository.DoctorRepository;
+import com.vet_care.demo.repository.PetRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -26,7 +31,7 @@ import static org.mockito.Mockito.when;
 public class AppointmentServiceTest {
 
     @Mock
-    private PetService petService;
+    private PetRepository petRepository;
 
     @Mock
     private AppointmentRepository appointmentRepository;
@@ -36,6 +41,12 @@ public class AppointmentServiceTest {
 
     @Mock
     private AvailableSlotRepository availableSlotRepository;
+
+    @Mock
+    private CacheManager cacheManager;
+
+    @Mock
+    private Cache cache;
 
     @InjectMocks
     private AppointmentService appointmentService;
@@ -59,16 +70,16 @@ public class AppointmentServiceTest {
 
         slot = new AvailableSlot();
         slot.setId(200L);
-        slot.setDateTime(LocalDateTime.now().plusDays(1));
+        slot.setSlotTime(LocalDateTime.now().plusDays(1));
         slot.setBooked(false);
     }
 
     @Test
     void addAppointment_ShouldCreateAppointment_WhenSlotAvailable() {
-        when(petService.getPetById(10L)).thenReturn(pet);
+        when(petRepository.findById(10L)).thenReturn(Optional.of(pet));
         when(doctorRepository.findById(100L)).thenReturn(Optional.of(doctor));
         when(availableSlotRepository.findById(200L)).thenReturn(Optional.of(slot));
-        when(appointmentRepository.existsBySlot_DateTimeAndDoctor(any(), any())).thenReturn(false);
+        when(appointmentRepository.existsBySlotSlotTimeAndDoctor(any(), any())).thenReturn(false);
 
         Appointment saved = new Appointment("Checkup", pet, doctor, slot);
         when(appointmentRepository.save(any(Appointment.class))).thenReturn(saved);
@@ -85,31 +96,31 @@ public class AppointmentServiceTest {
 
     @Test
     void addAppointment_ShouldThrowException_WhenDoctorNotFound() {
-        when(petService.getPetById(10L)).thenReturn(pet);
+        when(petRepository.findById(10L)).thenReturn(Optional.of(pet));
         when(doctorRepository.findById(100L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> appointmentService.addAppointment("Checkup", 10L, 100L, 200L));
     }
 
     @Test
     void addAppointment_ShouldThrowException_WhenSlotNotFound() {
-        when(petService.getPetById(10L)).thenReturn(pet);
+        when(petRepository.findById(10L)).thenReturn(Optional.of(pet));
         when(doctorRepository.findById(100L)).thenReturn(Optional.of(doctor));
         when(availableSlotRepository.findById(200L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> appointmentService.addAppointment("Checkup", 10L, 100L, 200L));
     }
 
     @Test
     void addAppointment_ShouldThrowException_WhenAppointmentAlreadyExists() {
-        when(petService.getPetById(10L)).thenReturn(pet);
+        when(petRepository.findById(10L)).thenReturn(Optional.of(pet));
         when(doctorRepository.findById(100L)).thenReturn(Optional.of(doctor));
         when(availableSlotRepository.findById(200L)).thenReturn(Optional.of(slot));
-        when(appointmentRepository.existsBySlot_DateTimeAndDoctor(any(), any())).thenReturn(true);
+        when(appointmentRepository.existsBySlotSlotTimeAndDoctor(any(), any())).thenReturn(true);
 
-        assertThrows(IllegalStateException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> appointmentService.addAppointment("Checkup", 10L, 100L, 200L));
     }
 
@@ -119,19 +130,22 @@ public class AppointmentServiceTest {
         appointment.setId(300L);
 
         when(appointmentRepository.findById(300L)).thenReturn(Optional.of(appointment));
+        when(cacheManager.getCache("petsByDoctor")).thenReturn(cache);
+        when(doctorRepository.findDoctorIdByAppointment(appointment)).thenReturn(100L);
 
         appointmentService.deleteAppointment(300L, user);
 
         assertFalse(slot.isBooked());
         verify(availableSlotRepository).save(slot);
         verify(appointmentRepository).delete(appointment);
+        verify(cache).evict(100L);
     }
 
     @Test
     void deleteAppointment_ShouldThrowException_WhenAppointmentNotFound() {
         when(appointmentRepository.findById(300L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> appointmentService.deleteAppointment(300L, user));
     }
 
@@ -145,7 +159,7 @@ public class AppointmentServiceTest {
 
         when(appointmentRepository.findById(300L)).thenReturn(Optional.of(appointment));
 
-        assertThrows(SecurityException.class,
+        assertThrows(AccessDeniedException.class,
                 () -> appointmentService.deleteAppointment(300L, otherUser));
     }
 }

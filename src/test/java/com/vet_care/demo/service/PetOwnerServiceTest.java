@@ -1,7 +1,7 @@
 package com.vet_care.demo.service;
 
 import com.vet_care.demo.model.PetOwner;
-import com.vet_care.demo.repository.PetOwnerRepository;
+import com.vet_care.demo.repository.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,10 +21,10 @@ import static org.mockito.Mockito.*;
  * @author Alish
  */
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+public class PetOwnerServiceTest {
 
     @Mock
-    private PetOwnerRepository userRepository;
+    private UserRepository userRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -36,7 +36,7 @@ public class UserServiceTest {
     private HttpServletRequest request;
 
     @InjectMocks
-    private UserService userService;
+    private PetOwnerService petOwnerService;
 
     private PetOwner testUser;
 
@@ -48,7 +48,7 @@ public class UserServiceTest {
     @Test
     void registerAndLoginUser_ShouldRejectIfEmailExists() throws Exception {
         when(userRepository.existsByEmail(testUser.getEmail())).thenReturn(true);
-        PetOwner result = userService.registerAndLoginUser(testUser, bindingResult, request);
+        PetOwner result = petOwnerService.registerAndLoginUser(testUser, bindingResult, request);
         assertNull(result);
         verify(bindingResult).rejectValue(eq("email"), eq("error.owner"), eq("Email already in use"));
         verify(userRepository, never()).save(any());
@@ -59,7 +59,7 @@ public class UserServiceTest {
     void registerAndLoginUser_ShouldReturnNullIfBindingResultHasErrors() throws Exception {
         when(userRepository.existsByEmail(testUser.getEmail())).thenReturn(false);
         when(bindingResult.hasErrors()).thenReturn(true);
-        PetOwner result = userService.registerAndLoginUser(testUser, bindingResult, request);
+        PetOwner result = petOwnerService.registerAndLoginUser(testUser, bindingResult, request);
         assertNull(result);
         verify(userRepository, never()).save(any());
         verify(request, never()).login(anyString(), anyString());
@@ -72,7 +72,7 @@ public class UserServiceTest {
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         PetOwner savedUser = new PetOwner("John", "Doe", "john@example.com", "encodedPassword");
         when(userRepository.save(any(PetOwner.class))).thenReturn(savedUser);
-        PetOwner result = userService.registerAndLoginUser(testUser, bindingResult, request);
+        PetOwner result = petOwnerService.registerAndLoginUser(testUser, bindingResult, request);
         assertNotNull(result);
         assertEquals("encodedPassword", result.getPassword());
         verify(passwordEncoder).encode("password123");
@@ -90,7 +90,7 @@ public class UserServiceTest {
                 .when(request).login(anyString(), anyString());
 
         assertThrows(ServletException.class,
-                () -> userService.registerAndLoginUser(testUser, bindingResult, request));
+                () -> petOwnerService.registerAndLoginUser(testUser, bindingResult, request));
 
         verify(userRepository).save(any(PetOwner.class));
         verify(request).login("john@example.com", "password123");

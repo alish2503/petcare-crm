@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author Alish
  */
-public class DoctorDTO {
+public class DoctorDto {
     private Long id;
     private String lastName;
     private String specialization;
@@ -44,12 +44,12 @@ public class DoctorDTO {
 
     public static class SlotDTO {
         private Long id;
-        private LocalDateTime dateTime;
+        private LocalDateTime slotTime;
         private boolean booked;
 
-        public SlotDTO(Long id, LocalDateTime dateTime, boolean booked) {
+        public SlotDTO(Long id, LocalDateTime slotTime, boolean booked) {
             this.id = id;
-            this.dateTime = dateTime;
+            this.slotTime = slotTime;
             this.booked = booked;
         }
 
@@ -57,8 +57,8 @@ public class DoctorDTO {
             return id;
         }
 
-        public LocalDateTime getDateTime() {
-            return dateTime;
+        public LocalDateTime getSlotTime() {
+            return slotTime;
         }
 
         public boolean isBooked() {

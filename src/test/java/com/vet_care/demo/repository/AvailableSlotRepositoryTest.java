@@ -1,17 +1,15 @@
 package com.vet_care.demo.repository;
 
-import com.vet_care.demo.model.*;
-import jakarta.persistence.EntityManager;
+import com.vet_care.demo.model.Appointment;
+import com.vet_care.demo.model.Pet;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import jakarta.persistence.EntityManager;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Alish
@@ -23,37 +21,33 @@ public class AvailableSlotRepositoryTest {
     private AvailableSlotRepository slotRepository;
 
     @Autowired
-    private PetRepository petRepository;
-
-    @Autowired
-    private PetOwnerRepository userRepository;
-
-    @Autowired
     private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private PetRepository petRepository;
 
     @Autowired
     private EntityManager entityManager;
 
     @Test
-    void resetSlotsForPet_shouldSetBookedToFalseForPetAppointments() {
-        PetOwner owner = new PetOwner("John", "Doe",
-                "john@example.com", "password");
+    void resetSlotsForPet_shouldSetBookedToFalseForExistingPetAppointments() {
+        Pet pet = petRepository.findById(1L).orElseThrow();
 
-        userRepository.save(owner);
-        Pet pet = new Pet("Buddy", "Dog", "Male",
-                LocalDate.of(2020, 1, 1), owner);
+        List<Appointment> appointments = appointmentRepository.findAllByPet(pet);
+        assertFalse(appointments.isEmpty(), "Pet should have appointments");
 
-        petRepository.save(pet);
-        AvailableSlot slot = new AvailableSlot(LocalDateTime.now().plusDays(1), true, null);
-        slotRepository.save(slot);
-        Appointment appointment = new Appointment("Checkup", pet, null, slot);
-        appointmentRepository.save(appointment);
-        AvailableSlot savedSlot = slotRepository.findById(slot.getId()).orElseThrow();
-        assertTrue(savedSlot.isBooked());
+        for (Appointment a : appointments) {
+            assertTrue(a.getSlot().isBooked(), "Slot should initially be booked");
+        }
+
         slotRepository.resetSlotsForPet(pet.getId());
         entityManager.clear();
-        AvailableSlot updatedSlot = slotRepository.findById(slot.getId()).orElseThrow();
-        assertFalse(updatedSlot.isBooked());
+
+        appointments = appointmentRepository.findAllByPet(pet);
+        for (Appointment a : appointments) {
+            assertFalse(a.getSlot().isBooked());
+        }
     }
 }
+
 

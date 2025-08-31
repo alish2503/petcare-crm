@@ -9,6 +9,6 @@ public interface MedicalRecordsPageProjection {
     Long getId();
     String getTreatment();
     String getDiagnosis();
-    LocalDate getDate();
+    LocalDate getRecordDate();
     String getDoctorLastName();
 }

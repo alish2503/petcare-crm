@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Slots</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/slots.css">
+    <link rel="stylesheet" href="/css/doctor-slots.css">
+    <link rel="stylesheet" href="/css/edit.css">
+    <link rel="stylesheet" href="/css/cards.css">
+</head>
+<body>
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/appointments">Appointments</a>
+    <a href="/pets">Pets</a>
+    <div class="nav-item active">Slots</div>
+    <form action="/logout" method="post">
+        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit" class="logout">Logout</button>
+    </form>
+</nav>
+
+<h2>Available slots</h2>
+    <input type="text" id="slotDatetime" placeholder="Choose date and time">
+    <button type="button" id="addSlotBtn" class="add-btn add-button">Add slot to list</button>
+<h2>Saved slots</h2>
+<div class="slots card">
+    <div th:each="slot : ${savedSlots}" class="slot-wrapper">
+        <form th:action="@{/doctor-slots/{id}(id=${slot.id})}" method="post" class="slot-form">
+            <input type="hidden" name="_method" value="DELETE"/>
+
+            <button type="button"
+                    th:class="'slot-btn ' + (${slot.booked} ? 'booked' : '')"
+                    th:disabled="${slot.booked}">
+                <span th:text="${#temporals.format(slot.slotTime,
+                     'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}"></span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<h2>New slots to save</h2>
+<div class="slots card" id="newSlotsList"></div>
+<form id="slotsForm" th:action="@{/doctor-slots}" method="post">
+    <div id="slotsHiddenInputs"></div>
+    <button class="save-btn" type="submit">Save new slots</button>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="/js/doctor-slots.js"></script>
+</body>
+</html>

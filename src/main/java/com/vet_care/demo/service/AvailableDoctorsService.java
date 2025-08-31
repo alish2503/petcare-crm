@@ -1,6 +1,6 @@
 package com.vet_care.demo.service;
 
-import com.vet_care.demo.dto.DoctorDTO;
+import com.vet_care.demo.dto.DoctorDto;
 import com.vet_care.demo.dto.FlatDoctorSlotDto;
 import com.vet_care.demo.repository.DoctorRepository;
 import org.springframework.stereotype.Service;
@@ -24,18 +24,18 @@ public class AvailableDoctorsService {
         this.doctorRepository = doctorRepository;
     }
 
-    public List<DoctorDTO> getDoctorsWithAvailableFutureSlots() {
+    public List<DoctorDto> getDoctorsWithAvailableFutureSlots() {
         List<FlatDoctorSlotDto> flatList = doctorRepository.findAllFutureDoctorSlotsFlat(LocalDateTime.now());
-        Map<Long, DoctorDTO> map = new LinkedHashMap<>();
+        Map<Long, DoctorDto> map = new LinkedHashMap<>();
         for (FlatDoctorSlotDto row : flatList) {
-            DoctorDTO doc = map.computeIfAbsent(row.doctorId(), id -> {
-                DoctorDTO d = new DoctorDTO();
+            DoctorDto doc = map.computeIfAbsent(row.doctorId(), id -> {
+                DoctorDto d = new DoctorDto();
                 d.setId(row.doctorId());
                 d.setLastName(row.lastName());
-                d.setSpecialization(row.specialization());
+                d.setSpecialization(row.specialization().name());
                 return d;
             });
-            doc.getAvailableSlots().add(new DoctorDTO.SlotDTO(
+            doc.getAvailableSlots().add(new DoctorDto.SlotDTO(
                     row.slotId(), row.dateTime(), row.booked()
             ));
         }

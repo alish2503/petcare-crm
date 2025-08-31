@@ -1,7 +1,6 @@
 package com.vet_care.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,48 +10,46 @@ import java.time.LocalDateTime;
  * @author Alish
  */
 @Entity
-public class AvailableSlot {
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"doctor_id", "slotTime"})
+})
+public class AvailableSlot extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotNull(message = "Date is required")
+    @Column(nullable = false)
+    @NotNull(message = "Slot date is required")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime dateTime;
+    private LocalDateTime slotTime;
+
+    @Column(nullable = false)
     private boolean booked = false;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
     public AvailableSlot() {}
-    public AvailableSlot(LocalDateTime dateTime, boolean booked, Doctor doctor) {
-        this.dateTime = dateTime;
-        this.booked = booked;
+    public AvailableSlot(LocalDateTime dateTime, Doctor doctor) {
+        this.slotTime = dateTime;
         this.doctor = doctor;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getSlotTime() {
+        return slotTime;
     }
 
     public boolean isBooked() {
         return booked;
     }
 
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
     public void setBooked(boolean booked) {
         this.booked = booked;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setSlotTime(LocalDateTime slotTime) {
+        this.slotTime = slotTime;
     }
 }

@@ -99,3 +99,9 @@ input, select {
 .edit-btn:hover {
     background-color: #5a6268;
 }
+
+.form-actions {
+  margin-top: 15px;
+  justify-content: flex-end;
+  gap: 10px;
+}

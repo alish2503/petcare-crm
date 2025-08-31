@@ -1,7 +1,7 @@
 package com.vet_care.demo.security;
 
-import com.vet_care.demo.model.PetOwner;
-import com.vet_care.demo.repository.PetOwnerRepository;
+import com.vet_care.demo.model.AbstractUser;
+import com.vet_care.demo.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,15 +13,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final PetOwnerRepository petUserRepository;
+    private final UserRepository userRepository;
 
-    public CustomUserDetailsService(PetOwnerRepository petUserRepository) {
-        this.petUserRepository = petUserRepository;
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        PetOwner user = petUserRepository.findByEmailWithPets(email)
+        AbstractUser user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return new CustomUserDetails(user);
     }

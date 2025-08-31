@@ -21,5 +21,4 @@ public class PetOwner extends AbstractUser {
     public List<Pet> getPets() {
         return pets;
     }
-
 }

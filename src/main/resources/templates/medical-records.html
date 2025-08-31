@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Medical Records</title>
@@ -14,24 +14,45 @@
     <a href="/appointments">Appointments</a>
     <a href="/pets">Pets</a>
     <div class="nav-item active">Medical Records</div>
+    <a href="/doctor-slots" sec:authorize="hasRole('ROLE_DOCTOR')">Slots</a>
     <form action="/logout" method="post">
+        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <button type="submit" class="logout">Logout</button>
     </form>
 </nav>
-  <h2>Medical records of pet : <span th:text="${petName}"></span></h2>
+<h2>Medical records of pet : <span th:text="${petName}"></span></h2>
+<div style="text-align: right;" sec:authorize="hasRole('DOCTOR')">
+    <button class="add-btn add-button" type="button" onclick="showAddForm()">
+        + Add medical record
+    </button>
+</div>
+<div id="editFormContainer" class="editFormContainer" sec:authorize="hasRole('DOCTOR')">
+    <form id="editForm" th:action="@{/pets/medical-records}" method="post">
+        <input type="hidden" name="petId" th:value="${petId}"/>
+        <label>Diagnosis</label>
+        <input type="text" id="diagnosis" name="diagnosis" required />
+        <label>Treatment</label>
+        <input type="text" id="treatment" name="treatment" required />
+        <div class="form-actions">
+            <button type="submit" class="save-btn">Apply</button>
+            <button type="button" class="cancel-btn" onclick="cancel()">Cancel</button>
+        </div>
+    </form>
+</div>
 <div th:each="record : ${medicalRecordsPageProjections}" class="card">
     <div class="record-card">
         <div class="record-row">
             <strong>Doctor:</strong>
             <p th:text="${record.doctorLastName}"></p>
             <strong>Treatment:</strong>
-            <p th:text="${record.diagnosis}"></p>
-            <strong>Date:</strong>
-            <p th:text="${#temporals.format(record.date, 'dd MMM yyyy', T(java.util.Locale).ENGLISH)}"></p>
-            <strong>Diagnosis:</strong>
             <p th:text="${record.treatment}"></p>
+            <strong>Date:</strong>
+            <p th:text="${#temporals.format(record.recordDate, 'dd MMM yyyy', T(java.util.Locale).ENGLISH)}"></p>
+            <strong>Diagnosis:</strong>
+            <p th:text="${record.diagnosis}"></p>
         </div>
     </div>
 </div>
+<script src="/js/medical-records.js"></script>
 </body>
 </html>

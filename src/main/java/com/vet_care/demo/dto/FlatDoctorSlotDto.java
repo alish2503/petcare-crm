@@ -1,5 +1,7 @@
 package com.vet_care.demo.dto;
 
+import com.vet_care.demo.model.Specialization;
+
 import java.time.LocalDateTime;
 
 /**
@@ -7,7 +9,7 @@ import java.time.LocalDateTime;
  */
 public record FlatDoctorSlotDto(Long doctorId,
                                 String lastName,
-                                String specialization,
+                                Specialization specialization,
                                 Long slotId,
                                 LocalDateTime dateTime,
                                 boolean booked

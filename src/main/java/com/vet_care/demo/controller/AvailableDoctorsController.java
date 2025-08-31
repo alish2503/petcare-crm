@@ -1,10 +1,11 @@
 package com.vet_care.demo.controller;
 
-import com.vet_care.demo.dto.DoctorDTO;
+import com.vet_care.demo.dto.DoctorDto;
 import com.vet_care.demo.model.PetOwner;
 import com.vet_care.demo.security.CustomUserDetails;
 import com.vet_care.demo.service.AvailableDoctorsService;
 import com.vet_care.demo.service.PetService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +18,6 @@ import java.util.List;
 
 @Controller
 public class AvailableDoctorsController {
-
     private final AvailableDoctorsService availableDoctorsService;
     private final PetService petService;
 
@@ -28,15 +28,13 @@ public class AvailableDoctorsController {
         this.petService = petService;
     }
 
-    @GetMapping("/availableDoctors")
+    @GetMapping("/appointments/available-doctors")
+    @PreAuthorize("hasRole('ROLE_PET_OWNER')")
     public String showAvailableDoctors(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
-
-        PetOwner owner = userDetails.getUser();
-        List<DoctorDTO> doctorDTOs = availableDoctorsService.getDoctorsWithAvailableFutureSlots();
-
-        model.addAttribute("doctorDTOs", doctorDTOs);
-        model.addAttribute("pets", petService.getPetsByOwner(owner));
-
+        PetOwner owner = (PetOwner)userDetails.user();
+        List<DoctorDto> doctorDtos = availableDoctorsService.getDoctorsWithAvailableFutureSlots();
+        model.addAttribute("doctorDtos", doctorDtos);
+        model.addAttribute("petsPageProjections", petService.getPetsDtosByOwner(owner));
         return "appointment-booking";
     }
 }

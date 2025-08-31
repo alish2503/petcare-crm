@@ -1,27 +1,21 @@
 package com.vet_care.demo.security;
 
-import com.vet_care.demo.model.PetOwner;
+import com.vet_care.demo.model.AbstractUser;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Alish
  */
-public class CustomUserDetails implements UserDetails {
-
-    private final PetOwner user;
-
-    public CustomUserDetails(PetOwner user) {
-        this.user = user;
-    }
-
+public record CustomUserDetails(AbstractUser user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return List.of(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override
@@ -32,9 +26,5 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return user.getEmail();
-    }
-
-    public PetOwner getUser() {
-        return user;
     }
 }

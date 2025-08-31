@@ -21,13 +21,13 @@ public class AppointmentController {
 
     @GetMapping
     public String listAppointments(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
-        PetOwner owner = userDetails.getUser();
-        model.addAttribute("appointmentsPageProjections", appointmentService.getAppointmentsForUser(owner));
+        AbstractUser user = userDetails.user();
+        model.addAttribute("appointmentsPageProjections", appointmentService.getAppointments(user));
         return "appointments";
     }
 
     @PostMapping
-    @PreAuthorize("@ownershipSecurityService.isOwner(#petId, principal)")
+    @PreAuthorize("hasRole('PET_OWNER') and @ownershipSecurityService.isOwner(#petId, principal)")
     public String addAppointment(@RequestParam String reason,
                                  @RequestParam Long petId,
                                  @RequestParam Long doctorId,
@@ -38,8 +38,9 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('PET_OWNER')")
     public String deleteAppointment(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        PetOwner user = userDetails.getUser();
+        PetOwner user = (PetOwner)userDetails.user();
         appointmentService.deleteAppointment(id, user);
         return "redirect:/appointments";
     }

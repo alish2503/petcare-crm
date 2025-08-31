@@ -1,7 +1,7 @@
 package com.vet_care.demo.controller;
 
 import com.vet_care.demo.model.PetOwner;
-import com.vet_care.demo.repository.PetOwnerRepository;
+import com.vet_care.demo.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,23 +28,23 @@ public class AuthControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private PetOwnerRepository ownerRepository;
+    private UserRepository ownerRepository;
 
     @Test
     void registerUser_withValidData_shouldRedirectToDashboard_andLoginUser() throws Exception {
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("firstName", "Alice")
+                        .param("firstName", "Tomas")
                         .param("lastName", "Smith")
-                        .param("email", "alice@example.com")
+                        .param("email", "tomas@example.com")
                         .param("password", "password123")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/dashboard"))
-                .andExpect(authenticated().withUsername("alice@example.com"));
+                .andExpect(authenticated().withUsername("tomas@example.com"));
 
-        PetOwner saved = ownerRepository.findByEmailWithPets("alice@example.com").orElseThrow();
-        assertEquals("Alice", saved.getFirstName());
+        PetOwner saved = (PetOwner)ownerRepository.findByEmail("tomas@example.com").orElseThrow();
+        assertEquals("Tomas", saved.getFirstName());
         assertEquals("Smith", saved.getLastName());
     }
 

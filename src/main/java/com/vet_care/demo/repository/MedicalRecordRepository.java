@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Long> {
 
-    List<MedicalRecordsPageProjection> findByPetId(Long petId);
+    List<MedicalRecordsPageProjection> findByPetIdOrderByRecordDateDesc(Long petId);
 }

@@ -1,10 +1,15 @@
 package com.vet_care.demo.controller;
 
+import com.vet_care.demo.model.AbstractUser;
 import com.vet_care.demo.model.PetOwner;
-import com.vet_care.demo.service.UserService;
+import com.vet_care.demo.model.Role;
+import com.vet_care.demo.security.CustomUserDetails;
+import com.vet_care.demo.service.PetOwnerService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AuthController {
 
-    private final UserService userService;
+    private final PetOwnerService petOwnerService;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
+    public AuthController(PetOwnerService petOwnerService) {
+        this.petOwnerService = petOwnerService;
     }
 
     @GetMapping("/")
@@ -31,7 +36,7 @@ public class AuthController {
     public String registerUser(@ModelAttribute("owner") @Valid PetOwner user,
                                BindingResult result, HttpServletRequest request) throws ServletException {
 
-        PetOwner savedUser = userService.registerAndLoginUser(user, result, request);
+        PetOwner savedUser = petOwnerService.registerAndLoginUser(user, result, request);
         if (result.hasErrors()) {
             return "register-form";
         }

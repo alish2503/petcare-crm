@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <title>Doctors</title>
     <link rel="stylesheet" href="/css/nav.css">
-    <link rel="stylesheet" href="/css/appointment-booking.css">
+    <link rel="stylesheet" href="/css/slots.css">
+    <link rel="stylesheet" href="/css/available-slots.css">
     <link rel="stylesheet" href="/css/edit.css">
     <link rel="stylesheet" href="/css/cards.css">
 </head>
@@ -15,33 +16,33 @@
     <div class="nav-item active">Booking</div>
     <a href="/pets">Pets</a>
     <form action="/logout" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <button type="submit" class="logout">Logout</button>
     </form>
 </nav>
 <h2>Doctors</h2>
 
-<div th:each="doctor : ${doctorDTOs}" class="card">
+<div th:each="doctor : ${doctorDtos}" class="card">
     <div class="card-header">
         <h3 th:text="'Dr. ' + ${doctor.lastName}">Dr. Smith</h3>
         <button class="add-btn" type="button"
-                th:onclick="${pets.isEmpty()} ? 'alert(\'You need to add a pet first!\')' : 'toggleForm(' + ${doctor.id} + ')'">
+                th:onclick="${petsPageProjections.isEmpty()} ? 'alert(\'You need to add a pet first!\')'
+                                : 'toggleForm(' + ${doctor.id} + ')'">
             Book
         </button>
     </div>
     <p th:text="${doctor.specialization}">Veterinary Surgeon</p>
-    <form th:if="${!pets.isEmpty()}"
+    <form th:if="${!petsPageProjections.isEmpty()}"
           th:action="@{/appointments}"
           method="post"
           th:id="'form-' + ${doctor.id}"
           class="editFormContainer">
 
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div id="editForm">
             <input type="hidden" name="doctorId" th:value="${doctor.id}" />
             <label>Pet Name</label>
             <select name="petId" required>
-                <option th:each="pet : ${pets}"
+                <option th:each="pet : ${petsPageProjections}"
                         th:value="${pet.id}"
                         th:text="${pet.name}">
                 </option>
@@ -58,7 +59,7 @@
                            th:disabled="${slot.booked}"
                            required />
                     <span
-                            th:text="${#temporals.format(slot.dateTime, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}">
+                            th:text="${#temporals.format(slot.slotTime, 'dd MMM yyyy HH:mm', T(java.util.Locale).ENGLISH)}">
                     </span>
                 </label>
             </div>

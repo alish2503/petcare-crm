@@ -9,25 +9,22 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 
 @Entity
-public class Appointment {
+public class Appointment extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    private Long id;
-
+    @Column(nullable = false)
     @NotBlank(message = "Reason is required")
     private String reason;
 
-    @ManyToOne
-    @JoinColumn(name = "pet_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "pet_id", nullable = false)
     private Pet pet;
 
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    @OneToOne
-    @JoinColumn(name = "slot_id")
+    @OneToOne(optional = false)
+    @JoinColumn(name = "slot_id", nullable = false, unique = true)
     private AvailableSlot slot;
 
     public Appointment() {}
@@ -48,10 +45,6 @@ public class Appointment {
 
     public AvailableSlot getSlot() {
         return slot;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setPet(Pet pet) {

@@ -1,0 +1,41 @@
+.slot-btn {
+    border: none;
+    background: none;
+    padding: 0;
+}
+
+.slot-btn:not(.booked):hover span {
+    background-color: #e2e6ea;
+}
+
+.slot-btn.booked span {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+    color: #888;
+    cursor: not-allowed;
+}
+
+#slotDatetime {
+    width: 220px;
+    padding: 6px 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.add-btn {
+    background: #007bff;
+    height: 38px;
+    padding: 0 15px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    background: #0056b3;
+}

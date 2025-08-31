@@ -1,6 +1,7 @@
 package com.vet_care.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,10 @@ import java.util.List;
 @Entity
 public class Doctor extends AbstractUser {
 
-    String specialization;
+    @Column(nullable = false)
+    @NotNull(message = "Specialization is required")
+    @Enumerated(EnumType.STRING)
+    private Specialization specialization;
 
     @OneToMany(mappedBy = "doctor")
     private List<Appointment> appointments = new ArrayList<>();
@@ -19,7 +23,7 @@ public class Doctor extends AbstractUser {
     @OneToMany(mappedBy = "doctor")
     private List<AvailableSlot> availableSlots = new ArrayList<>();
 
-    public Doctor(String firstName, String lastName, String email, String password, String specialization) {
+    public Doctor(String firstName, String lastName, String email, String password, Specialization specialization) {
         super(firstName, lastName, email, password);
         this.specialization = specialization;
     }
@@ -28,7 +32,7 @@ public class Doctor extends AbstractUser {
         super();
     }
 
-    public String getSpecialization() {
+    public Specialization getSpecialization() {
         return specialization;
     }
 
@@ -40,6 +44,7 @@ public class Doctor extends AbstractUser {
         this.availableSlots = availableSlots;
     }
 
-    public void setSpecialization(String surgeon) {
+    public void setSpecialization(Specialization specialization) {
+        this.specialization = specialization;
     }
 }
