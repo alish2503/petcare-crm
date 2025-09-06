@@ -66,6 +66,7 @@ public class PetService {
 
     @CacheEvict(value = "petsByOwner", key = "#owner.id")
     public Pet updatePet(Long id, Pet petData, PetOwner owner) {
+        evictPetCacheForDoctors(id);
         Pet updatedPet = petRepository.findById(id)
                 .map(existingPet -> {
                     existingPet.setName(petData.getName());
@@ -76,15 +77,14 @@ public class PetService {
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Pet not found"));
 
-        evictPetCacheForDoctors(id);
         return updatedPet;
     }
 
     @CacheEvict(value = "petsByOwner", key = "#owner.id")
     public void deletePet(Long id, PetOwner owner) {
+        evictPetCacheForDoctors(id);
         availableSlotRepository.resetSlotsForPet(id);
         petRepository.deleteById(id);
-        evictPetCacheForDoctors(id);
     }
 
     private void evictPetCacheForDoctors(Long petId) {
